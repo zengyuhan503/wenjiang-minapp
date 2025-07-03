@@ -1,0 +1,7 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "custom-navbar": "../../components/customNavbar",
+    "edit-louyu": "../../components/editLouyu"
+  }
+}

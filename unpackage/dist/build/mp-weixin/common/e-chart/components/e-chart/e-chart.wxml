@@ -1,0 +1,1 @@
+<canvas wx:if="{{a}}" type="2d" id="{{b}}" style="{{c}}" canvas-id="{{d}}" disable-scroll="{{e}}" bindtouchstart="{{f}}" bindtouchmove="{{g}}" bindtouchend="{{h}}" bindtouchcancel="{{i}}" bindready="{{j}}"></canvas>

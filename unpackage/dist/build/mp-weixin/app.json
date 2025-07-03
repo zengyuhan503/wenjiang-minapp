@@ -1,0 +1,34 @@
+{
+  "pages": [
+    "pages/home/index"
+  ],
+  "subPackages": [
+    {
+      "root": "package",
+      "pages": [
+        "login/login",
+        "louyu/edit",
+        "louyu/index",
+        "louyu/list",
+        "consultation/index",
+        "lease/detail",
+        "lease/index",
+        "picture/index",
+        "news/detail",
+        "news/index"
+      ]
+    }
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "uni-app",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "演示定位能力"
+    }
+  },
+  "usingComponents": {}
+}

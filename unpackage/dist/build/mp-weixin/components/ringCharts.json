@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "echart": "../common/e-chart/components/e-chart/e-chart"
+  }
+}

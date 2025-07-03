@@ -1,0 +1,147 @@
+import https from "./request"
+
+export const global={
+    config:()=>{
+        return https.get('/config')
+    }
+}
+export const article = {
+    // 文章列表
+    list: () => https.get("/article"),
+    detail: (id) => https.get(`/article/detail?id=${id}`)
+}
+export const user = {
+    // 登录
+    login: (params) => {
+        return https.post('/user/login', params)
+    },
+    // 刷新token
+    refresh: (params) => {
+        let expire_at = uni.getStorageSync('expire_at');
+        let now = Date.now();
+        if (now > expire_at) {
+            return https.refreshToken()
+        } else {
+            return Promise.resolve()
+        }
+    },
+    // 退出登录
+    logout: () => {
+
+        return https.post('/user/logout', {}, header)
+    },
+    // 获取用户信息
+    info: () => {
+
+        return https.get('/user/info', {}, header)
+    }
+}
+export const statistic = {
+    // 首页统计
+    home: () => {
+        return https.get('/index')
+    }
+}
+export const rental = {
+    // 列表
+    list: (params) => {
+        let param = {
+            page: params?.page || 1,
+            page_size: params?.page_size || 10,
+            house_id: params?.house_id || 0,
+        }
+        return https.get('/rental', param)
+    },
+    // 租赁详情
+    detail: (id) => {
+        return https.get(`/rental/detail?id=${id}`)
+    }
+}
+
+export const house = {
+    // 楼宇列表
+    list: (params) => {
+        return https.get('/house', params)
+    },
+    // 楼宇详情
+    detail: (id) => {
+        return https.get(`/house/detail?id=${id}`)
+    },
+    // 楼宇图片
+    pictures: (id, room_id = 0) => {
+        let param = {}
+        param.house_id = id;
+        room_id && (param.room_id = room_id);
+        return https.get(`/house/photos`, param)
+    },
+    // 楼宇图片添加
+    pictures_add: (params) => {
+        return https.post(`/house/photos`, params)
+    },
+    // 楼宇图片删除
+    deletePicture: (param) => {
+        return https.del(`/house/photos`, param)
+    },
+    // 楼层列表
+    floor: (params) => {
+
+        let param = {
+            house_id: params.house_id,
+            status: params.status || 0,
+        }
+        return https.get(`/house/floor`, param)
+    },
+    // 公司列表
+    company: (params) => {
+        let param = {
+            house_id: params.house_id,
+            floor_id: params.floor_id,
+            status: params.status ,
+            
+        }
+        return https.get(`/house/company`, param)
+    }
+}
+export const company = {
+    // 删除企业
+    deleted: (id) => {
+        return https.del(`/company?id=${id}`)
+    },
+    // 编辑企业
+    edit: (id, params) => {
+        return https.put(`/company/${id}`, params)
+    },
+    // 添加企业
+    add: (params) => {
+        return https.post('/company', params)
+    },
+    // 企业详情
+    info: (id) => {
+        return https.get(`/company/info?id=${id}`)
+    },
+    // 行业列表
+    industrys: (params) => {
+        return https.get('/company/industry')
+    },
+    // 楼栋列表
+    buildList: (params) => {
+        return https.get('/company/build', params)
+    },
+    // 楼层列表
+    floorList: (params) => {
+        return https.get('/company/floor', params)
+    }
+}
+
+export const leaveWord = {
+    // 留言
+    message: (params) => {
+        return https.post('/message', params)
+    }
+}
+export const upload = {
+    // 上传图片
+    image: (file) => {
+        return https.apiUploadImage('/attachment/upload', file)
+    }
+}

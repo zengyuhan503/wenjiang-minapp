@@ -1,0 +1,82 @@
+{
+	"pages": [{
+		"path": "pages/home/index",
+		"style": {
+			"navigationBarTitleText": " ",
+			"navigationStyle": "custom"
+		}
+	}],
+	"subPackages": [{
+		"root": "package",
+		"pages": [{
+				"path": "login/login",
+				"style": {
+					"navigationBarTitleText": " ",
+					"navigationStyle": "custom"
+				}
+			},
+			{
+				"path": "louyu/edit",
+				"style": {
+					"navigationBarTitleText": "编辑企业"
+				}
+			},
+			{
+				"path": "louyu/index",
+				"style": {
+					"navigationStyle": "custom"
+				}
+			},
+			{
+				"path": "louyu/list",
+				"style": {
+					"navigationBarTitleText": "楼宇"
+				}
+			},
+			{
+				"path": "consultation/index",
+				"style": {
+					"navigationStyle": "custom"
+				}
+			},
+			{
+				"path": "lease/detail",
+				"style": {
+					"navigationBarTitleText": "招租详情"
+				}
+			},
+			{
+				"path": "lease/index",
+				"style": {
+					"navigationBarTitleText": "招租"
+				}
+			},
+			{
+				"path": "picture/index",
+				"style": {
+					"navigationBarTitleText": "相册"
+				}
+			},
+			{
+				"path": "news/detail",
+				"style": {
+					"navigationBarTitleText": "最新资讯详情"
+				}
+			},
+			{
+				"path": "news/index",
+				"style": {
+					"navigationBarTitleText": " ",
+					"navigationStyle": "custom"
+				}
+			}
+		]
+	}],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"uniIdRouter": {}
+}
