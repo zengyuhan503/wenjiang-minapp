@@ -247,7 +247,7 @@ onLoad((options) => {
   .resources {
     margin-top: 16px;
     .item {
-      height: 40px;
+      min-height: 40px;
       background: #f2f5fa;
       border-radius: 4px 4px 4px 4px;
       padding: 9px 8px;
@@ -272,6 +272,7 @@ onLoad((options) => {
           line-height: 22px;
           text-align: left;
           margin-left: 4px;
+          flex: 1;
         }
       }
       .link {

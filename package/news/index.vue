@@ -2,9 +2,19 @@
   <view class="page-body">
     <CustomNavbar title="最新资讯" />
     <view class="items">
-      <view class="item" v-for="(item,index) in articleList" :key="index" @click="toNewDetail(item.id)">
+      <view
+        class="item"
+        v-for="(item, index) in articleList"
+        :key="index"
+        @click="toNewDetail(item.id)"
+      >
         <view class="title">
-          <image width="38px" :src="item.tag_image" mode="widthFix" v-if="item.tag_image"></image>
+          <image
+            width="38px"
+            :src="item.tag_image"
+            mode="widthFix"
+            v-if="item.tag_image"
+          ></image>
           <text>{{ item.title }}</text>
         </view>
         <view class="desc">
@@ -26,6 +36,7 @@ const articleList = ref([]);
 const getArticleList = () => {
   article.list().then((res) => {
     articleList.value = res.data.list;
+    console.log(articleList.value);
   });
 };
 
@@ -34,7 +45,7 @@ const toNewDetail = (id) => {
     url: `/package/news/detail?id=${id}`,
   });
 };
-onMounted(() => { 
+onMounted(() => {
   getArticleList();
 });
 </script>
@@ -42,7 +53,7 @@ onMounted(() => {
 <style lang="less" scoped>
 .page-body {
   width: 100%;
-  height:100vh;
+  height: 100vh;
   background: linear-gradient(180deg, #b2c8ff 0%, #f3f5fa 20%);
   border-radius: 0px 0px 0px 0px;
   padding: 100px 10px 10px 20px;
@@ -70,8 +81,10 @@ onMounted(() => {
 
       image {
         width: 38px;
+        height: 38px;
         margin-right: 8px;
       }
+
       text {
         font-family: PingFang SC, PingFang SC;
         font-weight: 600;
@@ -79,6 +92,12 @@ onMounted(() => {
         color: #17181a;
         line-height: 20px;
         text-align: left;
+        width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        
       }
     }
     .desc {
