@@ -8,14 +8,14 @@
       <template #back>
         <image
           v-if="isLogin"
-          src="https://louyutest.cdyunbu.com/wxapp/static/image/out.webp"
+          src="https://louyu.zdocd.com/wxapp/static/image/out.webp"
           mode="widthFix"
           class="back-icon"
         />
         <image
           style="width: 32px; height: 32px"
           v-else-if="isToLogin"
-          src="https://louyutest.cdyunbu.com/wxapp/static/image/user.png"
+          src="https://louyu.zdocd.com/wxapp/static/image/user.png"
           mode="widthFix"
           class="back-icon"
         />
@@ -23,7 +23,7 @@
     </CustomNavbar>
     <view class="page-head">
       <image
-        src="https://louyutest.cdyunbu.com/wxapp/static/image/home-back.webp"
+        src="https://louyu.zdocd.com/wxapp/static/image/home-back.webp"
         mode="widthFix"
       ></image>
       <view class="page-head-text">
@@ -41,7 +41,7 @@
               </view>
               <view class="title">
                 <image
-                  src="https://louyutest.cdyunbu.com/wxapp/static/image/data-icon.webp"
+                  src="https://louyu.zdocd.com/wxapp/static/image/data-icon.webp"
                   mode="widthFix"
                 ></image>
                 <text>总面积</text>
@@ -54,7 +54,7 @@
               </view>
               <view class="title">
                 <image
-                  src="https://louyutest.cdyunbu.com/wxapp/static/image/data-icon2.webp"
+                  src="https://louyu.zdocd.com/wxapp/static/image/data-icon2.webp"
                   mode="widthFix"
                 ></image>
                 <text>入驻率</text>
@@ -68,7 +68,7 @@
               </view>
               <view class="title">
                 <image
-                  src="https://louyutest.cdyunbu.com/wxapp/static/image/data-icon3.webp"
+                  src="https://louyu.zdocd.com/wxapp/static/image/data-icon3.webp"
                   mode="widthFix"
                 ></image>
                 <text>已入驻面积</text>
@@ -83,7 +83,7 @@
               <view class="title hasLink">
                 <view>
                   <image
-                    src="https://louyutest.cdyunbu.com/wxapp/static/image/data-icon4.webp"
+                    src="https://louyu.zdocd.com/wxapp/static/image/data-icon4.webp"
                     mode="widthFix"
                   ></image>
                   <text>楼宇总数</text>
@@ -91,7 +91,7 @@
                 <view class="link">
                   详情
                   <image
-                    src="https://louyutest.cdyunbu.com/wxapp/static/image/right.png"
+                    src="https://louyu.zdocd.com/wxapp/static/image/right.png"
                     mode="widthFix"
                   ></image>
                 </view>
@@ -168,7 +168,7 @@
             <view @click="toNewsList"
               >更多
               <image
-                src="https://louyutest.cdyunbu.com/wxapp/static/image/right.png"
+                src="https://louyu.zdocd.com/wxapp/static/image/right.png"
                 mode="widthFix"
               ></image>
             </view>

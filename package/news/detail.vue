@@ -20,14 +20,14 @@
         >
           <div class="title">
             <image
-              src="https://louyutest.cdyunbu.com/wxapp/static/image/pdf.webp"
+              src="https://louyu.zdocd.com/wxapp/static/image/pdf.webp"
               mode="widthFix"
             />
             <text>{{ item.name }}</text>
           </div>
           <div class="link">
             <image
-              src="https://louyutest.cdyunbu.com/wxapp/static/image/right.png"
+              src="https://louyu.zdocd.com/wxapp/static/image/right.png"
               mode="widthFix"
             />
           </div>
@@ -39,14 +39,14 @@
         >
           <div class="title">
             <image
-              src="https://louyutest.cdyunbu.com/wxapp/static/image/word.webp"
+              src="https://louyu.zdocd.com/wxapp/static/image/word.webp"
               mode="widthFix"
             />
             <text>{{ item.name }}</text>
           </div>
           <div class="link">
             <image
-              src="https://louyutest.cdyunbu.com/wxapp/static/image/right.png"
+              src="https://louyu.zdocd.com/wxapp/static/image/right.png"
               mode="widthFix"
             />
           </div>
@@ -58,14 +58,14 @@
         >
           <div class="title">
             <image
-              src="https://louyutest.cdyunbu.com/wxapp/static/image/xls.webp"
+              src="https://louyu.zdocd.com/wxapp/static/image/xls.webp"
               mode="widthFix"
             />
             <text>{{ item.name }}</text>
           </div>
           <div class="link">
             <image
-              src="https://louyutest.cdyunbu.com/wxapp/static/image/right.png"
+              src="https://louyu.zdocd.com/wxapp/static/image/right.png"
               mode="widthFix"
             />
           </div>
@@ -78,14 +78,14 @@
         >
           <div class="title">
             <image
-              src="https://louyutest.cdyunbu.com/wxapp/static/image/word.webp"
+              src="https://louyu.zdocd.com/wxapp/static/image/word.webp"
               mode="widthFix"
             />
             <text>{{ item.name }}</text>
           </div>
           <div class="link">
             <image
-              src="https://louyutest.cdyunbu.com/wxapp/static/image/right.png"
+              src="https://louyu.zdocd.com/wxapp/static/image/right.png"
               mode="widthFix"
             />
           </div>

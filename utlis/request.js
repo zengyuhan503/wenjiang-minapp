@@ -1,5 +1,5 @@
 // utils/request.js
-const baseURL = 'https://louyutest.cdyunbu.com/prod/api/wxapp'; // 替换为你的 API 基础地址
+const baseURL = 'https://louyu.zdocd.com/prod/api/wxapp'; // 替换为你的 API 基础地址
 let isRefreshing = false;
 let refreshPromise = null;
 const refreshAndRetry = async (originalRequestFn) => {

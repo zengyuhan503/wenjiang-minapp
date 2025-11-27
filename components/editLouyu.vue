@@ -23,7 +23,7 @@
 
       <div class="action" v-if="isLogin" @click="addCompany">
         <img
-          src="https://louyutest.cdyunbu.com/wxapp/static/image/add.png"
+          src="https://louyu.zdocd.com/wxapp/static/image/add.png"
           mode="widthFix"
           alt=""
         />

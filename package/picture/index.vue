@@ -23,7 +23,7 @@
       >
         <div class="item add">
           <image
-            src="https://louyutest.cdyunbu.com/wxapp/static/image/addpicture.webp"
+            src="https://louyu.zdocd.com/wxapp/static/image/addpicture.webp"
             alt=""
           />
         </div>

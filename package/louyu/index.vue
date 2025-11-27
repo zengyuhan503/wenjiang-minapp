@@ -2,14 +2,14 @@
   <view class="page-body">
     <CustomNavbar ref="customNavBarRef"> </CustomNavbar>
     <view class="page-head">
-      <image :src="`${houseDetail.top_image==''?'https://louyutest.cdyunbu.com/wxapp/static/image/case1.png':houseDetail.top_image}`" mode="widthFix"></image>
+      <image :src="`${houseDetail.top_image==''?'https://louyu.zdocd.com/wxapp/static/image/case1.png':houseDetail.top_image}`" mode="widthFix"></image>
     </view>
     <view class="page-content">
       <div class="info">
         <div class="title">{{ houseDetail.name }}</div>
         <div class="address">
           <image
-            src="https://louyutest.cdyunbu.com/wxapp/static/image/address.png"
+            src="https://louyu.zdocd.com/wxapp/static/image/address.png"
             mode="widthFix"
             alt=""
           />
@@ -71,7 +71,7 @@
           <div>
             共{{ housePictures.length }}张
             <img
-              src="https://louyutest.cdyunbu.com/wxapp/static/image/right.png"
+              src="https://louyu.zdocd.com/wxapp/static/image/right.png"
               alt=""
               mode="widthFix"
             />
@@ -92,7 +92,7 @@
           <div @click="toRentalList">
             更多
             <img
-              src="https://louyutest.cdyunbu.com/wxapp/static/image/right.png"
+              src="https://louyu.zdocd.com/wxapp/static/image/right.png"
               alt=""
               mode="widthFix"
             />
@@ -181,7 +181,7 @@ const getHouseDetail = (id) => {
   house.detail(id).then((res) => {
     houseDetail.value = res.data.info;
     if (houseDetail.value.top_image == null) {
-      houseDetail.value.top_image = `https://louyutest.cdyunbu.com/wxapp/static/image/case1.png`;
+      houseDetail.value.top_image = `https://louyu.zdocd.com/wxapp/static/image/case1.png`;
     }
     housePictures.value = res.data.photos;
   });

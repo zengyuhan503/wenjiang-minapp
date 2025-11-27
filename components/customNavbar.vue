@@ -22,7 +22,7 @@
   <view class="out-model" v-if="openOutModel">
     <div class="model-content">
       <image
-        src="https://louyutest.cdyunbu.com/wxapp/static/image/waring.webp"
+        src="https://louyu.zdocd.com/wxapp/static/image/waring.webp"
         class="waring"
         mode="widthFix"
       />

@@ -7,7 +7,7 @@
   <view class="page-body">
     <image
       class="img_back"
-      src="https://louyutest.cdyunbu.com/wxapp/static/image/consultation-back.webp"
+      src="https://louyu.zdocd.com/wxapp/static/image/consultation-back.webp"
       mode="widthFix"
     />
     <div class="page-content">
@@ -51,7 +51,7 @@
       <div class="dialog" v-if="isSubmitSuccess">
         <div class="content">
           <image
-            src="https://louyutest.cdyunbu.com/wxapp/static/image/success.webp"
+            src="https://louyu.zdocd.com/wxapp/static/image/success.webp"
             mode="widthFix"
           />
           <div>提交成功</div>
@@ -60,7 +60,7 @@
 
       <div class="dialog" v-if="isSubmitFail">
         <div class="content">
-          <image src="https://louyutest.cdyunbu.com/wxapp/static/image/error.webp" mode="widthFix" />
+          <image src="https://louyu.zdocd.com/wxapp/static/image/error.webp" mode="widthFix" />
           <div>{{ failMsg }}</div>
         </div>
       </div>

@@ -17,7 +17,7 @@
       <div class="page-head">
         <div class="title">
           <image
-            src="https://louyutest.cdyunbu.com/wxapp/static/image/menu.webp"
+            src="https://louyu.zdocd.com/wxapp/static/image/menu.webp"
             mode="widthFix"
             alt=""
           />
@@ -59,7 +59,7 @@
                 <template v-if="formState.industry == ''">
                   <text>请选择</text>
                   <image
-                    src="https://louyutest.cdyunbu.com/wxapp/static/image/right.png"
+                    src="https://louyu.zdocd.com/wxapp/static/image/right.png"
                     mode="widthFix"
                     alt=""
                   />
@@ -142,7 +142,7 @@
                 <template v-if="formState.register_date == ''">
                   <text>请选择</text>
                   <image
-                    src="https://louyutest.cdyunbu.com/wxapp/static/image/right.png"
+                    src="https://louyu.zdocd.com/wxapp/static/image/right.png"
                     mode="widthFix"
                     alt=""
                   />
@@ -202,7 +202,7 @@
                 <template v-if="formState.staff_size == null">
                   <text>请选择</text>
                   <image
-                    src="https://louyutest.cdyunbu.com/wxapp/static/image/right.png"
+                    src="https://louyu.zdocd.com/wxapp/static/image/right.png"
                     mode="widthFix"
                     alt=""
                   />
@@ -228,7 +228,7 @@
                 <template v-if="formState.join_date == null">
                   <text>请选择</text>
                   <image
-                    src="https://louyutest.cdyunbu.com/wxapp/static/image/right.png"
+                    src="https://louyu.zdocd.com/wxapp/static/image/right.png"
                     mode="widthFix"
                     alt=""
                   />
@@ -252,7 +252,7 @@
       <div class="page-head">
         <div class="title">
           <image
-            src="https://louyutest.cdyunbu.com/wxapp/static/image/louyu-icon.webp"
+            src="https://louyu.zdocd.com/wxapp/static/image/louyu-icon.webp"
             mode="widthFix"
             alt=""
           />
@@ -343,7 +343,7 @@
                 <view class="delete">
                   <image
                     @click="onDeleteArea(item)"
-                    src="https://louyutest.cdyunbu.com/wxapp/static/image/delete_icon.webp"
+                    src="https://louyu.zdocd.com/wxapp/static/image/delete_icon.webp"
                     mode="widthFix"
                     alt=""
                   ></image>

@@ -25,6 +25,8 @@ const detail = ref({
 let rentel_id = null;
 let house_id = null;
 function formatRichText(html) {
+console.log(html)
+if (html==null) return "";
   return html.replace(/<img[^>]*>/gi, function (match) {
     if (match.includes("style=")) {
       // 如果已有 style，追加 max-width

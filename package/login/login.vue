@@ -4,12 +4,12 @@
     <view style="position: relative">
       <image
         class="login-back"
-        src="https://louyutest.cdyunbu.com/wxapp/static/image/login-back.webp"
+        src="https://louyu.zdocd.com/wxapp/static/image/login-back.webp"
         mode="widthFix"
       ></image>
       <view class="login-head">
         <image
-          src="https://louyutest.cdyunbu.com/wxapp/static/image/login-icon.webp"
+          src="https://louyu.zdocd.com/wxapp/static/image/login-icon.webp"
           mode="widthFix"
         ></image>
         <view class="login-head-text"> 温江区楼宇帮 </view>
@@ -19,7 +19,7 @@
       <view class="login-input">
         <view class="login-input-icon">
           <image
-            src="https://louyutest.cdyunbu.com/wxapp/static/image/user-icon.webp"
+            src="https://louyu.zdocd.com/wxapp/static/image/user-icon.webp"
             mode="widthFix"
           ></image>
         </view>
@@ -35,7 +35,7 @@
       <view class="login-input" style="margin-top: 25px">
         <view class="login-input-icon">
           <image
-            src="https://louyutest.cdyunbu.com/wxapp/static/image/pwd-icon.webp"
+            src="https://louyu.zdocd.com/wxapp/static/image/pwd-icon.webp"
             mode="widthFix"
           ></image>
         </view>

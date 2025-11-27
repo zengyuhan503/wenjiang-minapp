@@ -19,7 +19,7 @@
     <!-- <image
       v-if="showPlayBtn"
       class="play-btn"
-      src="https://louyutest.cdyunbu.com/wxapp/static/image/custom-play.webp"
+      src="https://louyu.zdocd.com/wxapp/static/image/custom-play.webp"
       @click="playVideo"
     /> -->
   </view>
