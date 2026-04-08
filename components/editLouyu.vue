@@ -347,7 +347,8 @@ onMounted(() => {
     overflow: hidden;
 
     &.isActive {
-      max-height: 500px; /* 设置一个足够大的值 */
+      max-height: 3000px; /* 设置一个足够大的值 */
+	  overflow-y: auto;
     }
     .collap {
       padding: 12px 0;

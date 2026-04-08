@@ -1,11 +1,69 @@
 {
-	"pages": [{
-		"path": "pages/home/index",
-		"style": {
-			"navigationBarTitleText": " ",
-			"navigationStyle": "custom"
+	"pages": [
+		{
+			"path": "pages/home/index",
+			"style": {
+				"navigationBarTitleText": " ",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/louyu/list",
+			"style": {
+				"navigationBarTitleText": "楼宇"
+			}
+		},
+		{
+			"path": "pages/supply/index",
+			"style": {
+				"navigationBarTitleText": "供需"
+			}
+		},
+		{
+			"path": "pages/supply/detail",
+			"style": {
+				"navigationBarTitleText": "供需详情"
+			}
+		},
+		{
+			"path": "pages/policy/index",
+			"style": {
+				"navigationBarTitleText": "政策帮",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/policy/ai",
+			"style": {
+				"navigationBarTitleText": "温小楼",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/supply/message",
+			"style": {
+				"navigationBarTitleText": "留言"
+			}
+		},
+		{
+			"path": "pages/supply/my",
+			"style": {
+				"navigationBarTitleText": "我的供需"
+			}
+		},
+		{
+			"path": "pages/supply/my-detail",
+			"style": {
+				"navigationBarTitleText": "供需详情"
+			}
+		},
+		{
+			"path": "pages/supply/publish",
+			"style": {
+				"navigationBarTitleText": "发布供需"
+			}
 		}
-	}],
+	],
 	"subPackages": [{
 		"root": "package",
 		"pages": [{
@@ -25,12 +83,6 @@
 				"path": "louyu/index",
 				"style": {
 					"navigationStyle": "custom"
-				}
-			},
-			{
-				"path": "louyu/list",
-				"style": {
-					"navigationBarTitleText": "楼宇"
 				}
 			},
 			{
@@ -77,6 +129,38 @@
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
+	},
+	"tabBar": {
+		"color": "#8a8f99",
+		"selectedColor": "#3c9cff",
+		"backgroundColor": "#ffffff",
+		"borderStyle": "black",
+		"list": [
+			{
+				"pagePath": "pages/home/index",
+				"text": "首页",
+				"iconPath": "static/tabbar/home.png",
+				"selectedIconPath": "static/tabbar/home_active.png"
+			},
+			{
+				"pagePath": "pages/louyu/list",
+				"text": "楼宇",
+				"iconPath": "static/tabbar/louyu.png",
+				"selectedIconPath": "static/tabbar/louyu_active.png"
+			},
+			{
+				"pagePath": "pages/supply/index",
+				"text": "供需",
+				"iconPath": "static/tabbar/supply.png",
+				"selectedIconPath": "static/tabbar/supply_active.png"
+			},
+			{
+				"pagePath": "pages/policy/index",
+				"text": "政策帮",
+				"iconPath": "static/tabbar/policy.png",
+				"selectedIconPath": "static/tabbar/policy_active.png"
+			}
+		]
 	},
 	"uniIdRouter": {}
 }

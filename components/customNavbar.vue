@@ -1,18 +1,18 @@
 <template>
   <view
     class="custom-navbar"
-    :style="{ paddingTop: statusBarHeight + 'px', height: navBarHeight + 'px' }"
+    :style="{ paddingTop: statusBarHeight + 'px', height: navBarHeight + 'px', backgroundColor: bgColor }"
   >
     <view class="nav-content">
       <!-- 返回按钮区域 -->
       <view class="back-btn" @click="handleBack">
         <slot name="back">
-          <uni-icons type="left" size="20" color="#fff"></uni-icons>
+          <uni-icons type="left" size="20" :color="titleColor"></uni-icons>
         </slot>
       </view>
 
       <!-- 标题区域 -->
-      <view class="nav-title">
+      <view class="nav-title" :style="{ color: titleColor }">
         <slot name="title">
           {{ title }}
         </slot>
@@ -41,6 +41,7 @@ import { ref, onMounted } from "vue";
 const props = defineProps({
   title: { type: String, default: "" },
   titleColor: { type: String, default: "#000" },
+  bgColor: { type: String, default: "transparent" },
   onBack: Function, // 自定义返回行为
 });
 

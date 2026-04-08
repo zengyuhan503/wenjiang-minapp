@@ -139,6 +139,51 @@ export const leaveWord = {
         return https.post('/message', params)
     }
 }
+export const supply = {
+    // 供需列表
+    list: (params) => {
+        return https.get('/supply-demand/list', params)
+    },
+    // 行业列表
+    industries: () => {
+        return https.get('/supply-demand/industries')
+    },
+    // 我的供需列表
+    my: (params) => {
+        return https.get('/supply-demand/my', params)
+    },
+    // 供需详情
+    detail: (id) => {
+        return https.get(`/supply-demand/detail?id=${id}`)
+    },
+    // 收到的留言数
+    receivedCount: () => {
+        return https.get('/supply-demand/message/received-count')
+    },
+    // 创建留言
+    messageCreate: (params) => {
+        return https.post('/supply-demand/message/create', params)
+    }
+}
+
+export const policy = {
+    // 政策文件列表
+    list: (params) => {
+        return https.get('/policy-file/list', params)
+    }
+}
+
+export const ai = {
+    // AI提问
+    ask: (params) => {
+        return https.post('/ai/ask', params)
+    },
+    // AI历史
+    history: (params) => {
+        return https.get('/ai/history', params)
+    }
+}
+
 export const upload = {
     // 上传图片
     image: (file) => {
