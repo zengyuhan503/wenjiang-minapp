@@ -136,17 +136,17 @@ const cancelDelete = () => {
 
 const confirmDelete = () => {
   if (itemToDelete.value) {
-    // TODO: 调用删除接口并刷新列表
+    // 调用删除接口并刷新列表
     supply.delete(itemToDelete.value.id).then(res => {
-      if (res.code == 200) {
+      if (res.code == 200 || res.code === 0 || !res.code) {
         uni.showToast({ title: '删除成功', icon: 'none' });
-        getList();
+        getList(true); // 成功后重新加载第一页数据
       } else {
-        uni.showToast({ title: res.msg || '删除失败' , icon: 'none' });
+        uni.showToast({ title: res.message || res.msg || '删除失败' , icon: 'none' });
       }
     }).catch(err => {
       console.log("删除供需失败", err);
-      uni.showToast({ title: err.msg || '删除失败' , icon: 'none' });
+      uni.showToast({ title: err?.message || err?.msg || '删除失败' , icon: 'none' });
     }).finally(() => {
       showDeleteModal.value = false;
       itemToDelete.value = null;
@@ -156,7 +156,7 @@ const confirmDelete = () => {
 
 const goToDetail = (item) => {
   uni.navigateTo({
-    url: `/pages/supply/detail?id=${item.id}`
+    url: `/pages/supply/detail?id=${item.id}&from=my`
   });
 };
 
@@ -171,8 +171,7 @@ const onPublish = () => {
     url: '/pages/supply/publish'
   });
 };
-
-onLoad(() => {
+onShow(() => {
   getList(true);
 });
 </script>

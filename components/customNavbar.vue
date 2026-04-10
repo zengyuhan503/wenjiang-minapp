@@ -168,7 +168,7 @@ defineExpose({
   width: 44px;
   height: 44px;
   position: absolute;
-  left: 12px;
+  left: 0;
   top: 0;
   display: flex;
   align-items: center;

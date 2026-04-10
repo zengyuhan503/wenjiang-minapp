@@ -14,6 +14,7 @@
       class="chat-scroll-area" 
       :scroll-into-view="scrollToView"
       scroll-with-animation
+      :show-scrollbar="false"
     >
       <view class="chat-content">
         
@@ -54,11 +55,18 @@
             </view>
 
             <!-- AI 文本回答卡片 -->
-            <view class="ai-card text-card" v-if="msg.content || msg.isTyping">
-              <view class="card-title" >这是我为您搜索出的答案：</view>
+            <view class="ai-card text-card" v-if="msg.content || msg.isTyping || msg.isLoading">
+              <view class="card-title" v-if="!msg.isLoading && msg.content !== '已停止生成' && msg.content !== '获取回答失败' && msg.content !== '网络请求失败'">这是我为您搜索出的答案：</view>
               <view class="answer-text">
-                <text>{{ msg.isTyping ? msg.displayedContent : msg.content }}</text>
+                <text v-if="!msg.isLoading">{{ msg.isTyping ? msg.displayedContent : msg.content }}</text>
                 <text v-if="msg.isTyping" class="cursor">|</text>
+                
+                <!-- 加载中动画 -->
+                <view v-if="msg.isLoading" class="loading-dots">
+                  <view class="dot"></view>
+                  <view class="dot"></view>
+                  <view class="dot"></view>
+                </view>
               </view>
             </view>
 
@@ -67,11 +75,12 @@
         </block>
         
         <!-- 底部垫高，防止内容被输入框遮挡 -->
-        <view class="bottom-padding"></view>
+        <view class="bottom-padding" id="msg-bottom-1"></view>
+        <view class="bottom-padding" id="msg-bottom-2"></view>
       </view>
     </scroll-view>
 
-    <!-- 底部输入区（卡片式） -->
+        <!-- 底部输入区（卡片式） -->
     <view class="input-area">
       <view class="input-card">
         <textarea 
@@ -82,9 +91,14 @@
           :auto-height="false"
           :maxlength="200"
           :show-confirm-bar="false"
+          confirm-type="send"
+          @confirm="sendMessage"
         />
-        <view class="send-btn" @click="sendMessage">
+        <view class="send-btn" @click="sendMessage" v-if="!isGenerating">
           <image src="../../static/image/up-arrow.png" mode="widthFix" class="send-icon"></image>
+        </view>
+        <view class="send-btn stop-btn" @click="stopGenerating" v-else>
+          <view class="stop-icon"></view>
         </view>
       </view>
       <!-- 安全区适配 -->
@@ -102,8 +116,44 @@ import CustomNavbar from "../../components/customNavbar.vue";
 const inputValue = ref('');
 const messageList = ref([]);
 const scrollToView = ref('');
+const bottomId = ref('msg-bottom-1');
 const sessionId = ref(null);
 const isLoading = ref(false);
+const isGenerating = ref(false);
+let currentTypingTimer = null;
+let scrollThrottleTimer = null;
+
+// 节流版滚动到底部，避免打字机期间频繁触发重排
+const throttledScrollToBottom = () => {
+  if (scrollThrottleTimer) return;
+  scrollThrottleTimer = setTimeout(() => {
+    scrollToBottom();
+    scrollThrottleTimer = null;
+  }, 300); // 限制 300ms 触发一次
+};
+
+const stopGenerating = () => {
+  isGenerating.value = false;
+  isLoading.value = false;
+  
+  if (currentTypingTimer) {
+    clearInterval(currentTypingTimer);
+    currentTypingTimer = null;
+  }
+  
+  if (messageList.value.length > 0) {
+    const lastMsg = messageList.value[messageList.value.length - 1];
+    if (lastMsg.type === 'ai') {
+      if (lastMsg.isLoading) {
+        lastMsg.isLoading = false;
+        lastMsg.content = '已停止生成';
+      } else if (lastMsg.isTyping) {
+        lastMsg.isTyping = false;
+        lastMsg.content = lastMsg.displayedContent || '已停止生成';
+      }
+    }
+  }
+};
 
 const getHistory = () => {
   uni.showLoading({ title: '加载中' });
@@ -116,27 +166,28 @@ const getHistory = () => {
           if (item.question) {
             messageList.value.push({ type: 'user', content: item.question });
           }
-          if (item.answer || (item.policy_file_list && item.policy_file_list.length > 0)) {
+          const files = item.policy_file_list && item.policy_file_list.length > 0 
+            ? item.policy_file_list 
+            : (item.related_files || []);
+            
+          if (item.answer || files.length > 0) {
             messageList.value.push({
               type: 'ai',
               content: item.answer,
-              policy_file_list: item.policy_file_list || []
+              policy_file_list: files
             });
           }
         });
       } else {
         // list 为空，填充测试数据
-        addMockData();
       }
       scrollToBottom();
     } else {
       // 接口返回的不是 200 或没有 data，也填充测试数据
-      addMockData();
       scrollToBottom();
     }
   }).catch(err => {
     console.log('获取历史记录失败', err);
-    addMockData();
     scrollToBottom();
   }).finally(() => {
     uni.hideLoading();
@@ -182,23 +233,34 @@ const addMockData = () => {
 const typeMessage = (fullText, msgObj) => {
   if (!fullText) {
     msgObj.isTyping = false;
-    msgObj.content = '';
+    msgObj.content = '未获取到有效回答';
+    isGenerating.value = false;
     return;
   }
   let i = 0;
   msgObj.isTyping = true;
   msgObj.displayedContent = '';
   
-  const timer = setInterval(() => {
+  currentTypingTimer = setInterval(() => {
+    if (!isGenerating.value) {
+      clearInterval(currentTypingTimer);
+      currentTypingTimer = null;
+      msgObj.isTyping = false;
+      msgObj.content = msgObj.displayedContent || '已停止生成';
+      return;
+    }
+
     if (i < fullText.length) {
       msgObj.displayedContent += fullText.charAt(i);
       i++;
-      // 随打字稍微滚动到底部，可根据需求调节频率
-      if (i % 3 === 0) scrollToBottom();
+      // 使用节流版本稍微滚动到底部，极大降低渲染开销
+      throttledScrollToBottom();
     } else {
-      clearInterval(timer);
+      clearInterval(currentTypingTimer);
+      currentTypingTimer = null;
       msgObj.isTyping = false;
       msgObj.content = fullText;
+      isGenerating.value = false;
       scrollToBottom();
     }
   }, 30); // 30ms/字，打字速度
@@ -206,14 +268,32 @@ const typeMessage = (fullText, msgObj) => {
 
 const sendMessage = () => {
   const content = inputValue.value.trim();
-  if (!content || isLoading.value) return;
+  if (!content || isGenerating.value) return;
 
   // 用户发送消息
   messageList.value.push({ type: 'user', content });
-  inputValue.value = '';
+  
+  // 必须在清空前隐藏键盘，或使用 nextTick 清空，避免回车换行符被保留
+  setTimeout(() => {
+    inputValue.value = '';
+  }, 10);
+  
+  // 立即插入一个正在加载的 AI 消息占位
+  const placeholderAiMsg = {
+    type: 'ai',
+    content: '',
+    displayedContent: '',
+    isTyping: false,
+    isLoading: true,
+    policy_file_list: []
+  };
+  messageList.value.push(placeholderAiMsg);
+  const activeMsgIndex = messageList.value.length - 1;
+
   scrollToBottom();
 
   isLoading.value = true;
+  isGenerating.value = true;
 
   const params = {
     question: content
@@ -223,28 +303,36 @@ const sendMessage = () => {
   }
 
   ai.ask(params).then(res => {
+    if (!isGenerating.value) return; // 用户已停止生成
+    
+    const activeMsg = messageList.value[activeMsgIndex];
+    activeMsg.isLoading = false;
+    
     if (res.code === 200 && res.data) {
       if (res.data.session_id) {
         sessionId.value = res.data.session_id;
       }
       
-      const newAiMsg = {
-        type: 'ai',
-        content: '',
-        displayedContent: '',
-        isTyping: true,
-        policy_file_list: res.data.policy_file_list || []
-      };
-      messageList.value.push(newAiMsg);
+      activeMsg.policy_file_list = res.data.policy_file_list && res.data.policy_file_list.length > 0 
+          ? res.data.policy_file_list 
+          : (res.data.related_files || []);
       
       // 开始打字机动画
-      typeMessage(res.data.answer || '', newAiMsg);
+      typeMessage(res.data.answer || '', activeMsg);
       
     } else {
       uni.showToast({ title: res.message || '获取回答失败', icon: 'none' });
+      activeMsg.content = '获取回答失败';
+      isGenerating.value = false;
     }
   }).catch(err => {
-    uni.showToast({ title: '网络请求失败', icon: 'none' });
+    if (isGenerating.value) {
+      uni.showToast({ title: '网络请求失败', icon: 'none' });
+      const activeMsg = messageList.value[activeMsgIndex];
+      activeMsg.isLoading = false;
+      activeMsg.content = '网络请求失败';
+      isGenerating.value = false;
+    }
   }).finally(() => {
     isLoading.value = false;
   });
@@ -252,14 +340,14 @@ const sendMessage = () => {
 
 const scrollToBottom = () => {
   nextTick(() => {
+    // scroll-into-view 需要重置为空值后再赋值新的 id 才能触发组件的更新侦听
+    // 并且 setTimeout 给小程序一点点渲染时间差，不然容易被 Vue 批处理优化掉
+    scrollToView.value = '';
+    
     setTimeout(() => {
-      const len = messageList.value.length;
-      if (len > 0) {
-        scrollToView.value = 'msg-' + (len - 1);
-      } else {
-        scrollToView.value = 'msg-welcome';
-      }
-    }, 100);
+      bottomId.value = bottomId.value === 'msg-bottom-1' ? 'msg-bottom-2' : 'msg-bottom-1';
+      scrollToView.value = bottomId.value;
+    }, 50);
   });
 };
 
@@ -375,10 +463,21 @@ onLoad(() => {
   position: relative;
   z-index: 10;
   margin-top: 80px; /* 避开导航栏 */
+  height: calc(100vh - 80px - 140px); /* 导航栏高度 - 底部输入框预估高度 - 底部安全区 */
+  box-sizing: border-box;
+}
+
+/* 隐藏 scroll-view 滚动条 (针对各种平台) */
+::-webkit-scrollbar {
+  display: none;
+  width: 0 !important;
+  height: 0 !important;
+  -webkit-appearance: none;
+  background: transparent;
 }
 
 .chat-content {
-  padding: 16px 16px 170px; /* 底部给输入框留出充足空间 */
+  padding: 16px 16px 20px; /* 底部不再需要留超大空白，给个基础 padding 即可 */
 }
 
 /* 欢迎卡片 */
@@ -457,15 +556,15 @@ onLoad(() => {
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 12px 12px 12px 12px;
   padding: 12px;
-  width: 85%;
+  width: 100%;
   position: relative;
   
   .card-title {
     font-size: 14px;
     font-weight: 600;
     color: #17181a;
-    height: 48px;
-    line-height: 48px;
+    height: 38px;
+    line-height: 28px;
   }
 
   .action-btn {
@@ -488,8 +587,7 @@ onLoad(() => {
   }
 }
 .text-card{
-  padding-top: 0;
-  border-radius: 2px 12px 12px 12px;
+  border-radius: 12px 12px 12px 12px;
 }
 
 /* 文件列表 */
@@ -554,14 +652,43 @@ onLoad(() => {
   }
 }
 
+/* 加载中动画 */
+.loading-dots {
+  display: flex;
+  align-items: center;
+  height: 24px;
+  
+  .dot {
+    width: 6px;
+    height: 6px;
+    background-color: #7B85FF;
+    border-radius: 50%;
+    margin-right: 4px;
+    animation: bounce 1.4s infinite ease-in-out both;
+  }
+  
+  .dot:nth-child(1) { animation-delay: -0.32s; }
+  .dot:nth-child(2) { animation-delay: -0.16s; }
+  .dot:nth-child(3) { animation-delay: 0s; }
+}
+
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
 }
 
+@keyframes bounce {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
+}
+
+/* 底部垫高 */
+.bottom-padding {
+  height: 2px;
+}
+
 /* 底部输入区 (大卡片样式) */
 .input-area {
-  position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
@@ -569,6 +696,7 @@ onLoad(() => {
   box-sizing: border-box;
   background: transparent;
   z-index: 100;
+  height: 140px;
   
   .input-card {
     background-color: #ffffff;
@@ -613,6 +741,17 @@ onLoad(() => {
       
       &:active {
         opacity: 0.8;
+      }
+      
+      &.stop-btn {
+        background-color: #7B85FF;
+        
+        .stop-icon {
+          width: 10px;
+          height: 10px;
+          background-color: #ffffff;
+          border-radius: 2px;
+        }
       }
     }
   }

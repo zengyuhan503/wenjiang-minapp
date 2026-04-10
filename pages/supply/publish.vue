@@ -190,7 +190,7 @@ const onSubmit = () => {
   if (currentId) {
     // 更新
     supply.update(currentId, formData.value).then(res => {
-      if (res.code == 200) {
+      if (res.code == 200 || res.code === 0 || !res.code) {
         showSuccessDialog.value = true;
       } else {
         uni.showToast({ title: res.message || '更新失败', icon: 'none' });
@@ -202,12 +202,19 @@ const onSubmit = () => {
       uni.hideLoading();
     });
   } else {
-    // 新增（假设有个 create 接口，如果没有请告诉我，这里暂时模拟）
-    // supply.create(formData.value).then(...)
-    setTimeout(() => {
+    // 新增
+    supply.create(formData.value).then(res => {
+      if (res.code == 200 || res.code === 0 || !res.code) {
+        showSuccessDialog.value = true;
+      } else {
+        uni.showToast({ title: res.message || '发布失败', icon: 'none' });
+      }
+    }).catch(err => {
+      console.log("发布供需失败", err);
+      uni.showToast({ title: '发布失败', icon: 'none' });
+    }).finally(() => {
       uni.hideLoading();
-      showSuccessDialog.value = true;
-    }, 1000);
+    });
   }
 };
 
@@ -298,7 +305,7 @@ const onCloseDialog = () => {
 
 .title-input {
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 500;
   color: #17181a;
   height: 48px;
   line-height: 48px;
@@ -388,9 +395,10 @@ const onCloseDialog = () => {
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  padding: 0 20px;
+  padding: 16px 28px;
   padding-bottom: env(safe-area-inset-bottom);
   z-index: 100;
+  border-top: 1px solid #E1E5EA;
   
   .submit-btn {
     width: 100%;
@@ -442,7 +450,7 @@ const onCloseDialog = () => {
     width: 280px;
     background-color: #ffffff;
     border-radius: 12px;
-    padding: 32px 24px 24px;
+    padding:24px 20px 16px 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -466,7 +474,7 @@ const onCloseDialog = () => {
       color: #5c5f66;
       line-height: 20px;
       text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
     
     .modal-btn {

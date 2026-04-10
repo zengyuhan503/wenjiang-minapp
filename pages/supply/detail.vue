@@ -1,7 +1,7 @@
 <template>
   <view class="page-container">
     <scroll-view scroll-y class="content-scroll">
-      
+
       <!-- 模块1：标题、简介、图片 -->
       <view class="block-section">
         <!-- 标题 -->
@@ -10,24 +10,15 @@
         <!-- 简介文案 -->
         <view class="desc-content">
           <rich-text v-if="detail.content" :nodes="formatRichText(detail.content)"></rich-text>
-          <text v-else>{{ detail.desc || '当前市场供需关系呈现结构性分化特征，整体供需格局趋于动态调整。部分领域供给相对充足，竞争较为充分，但有效供给与高品质需求仍存在一定差距。随着消费需求持续升级，市场对产品质量、服务体验和个性化供给提出更高要求。' }}</text>
+          <text v-else>{{ detail.desc ||
+            '当前市场供需关系呈现结构性分化特征，整体供需格局趋于动态调整。部分领域供给相对充足，竞争较为充分，但有效供给与高品质需求仍存在一定差距。随着消费需求持续升级，市场对产品质量、服务体验和个性化供给提出更高要求。'
+            }}</text>
         </view>
 
         <!-- 图片列表 (横向并排) -->
         <view class="image-list" v-if="detail.images && detail.images.length > 0">
-          <image 
-            v-for="(img, index) in detail.images" 
-            :key="index" 
-            :src="img" 
-            mode="aspectFill" 
-            @click="previewImage(img, detail.images)"
-            class="detail-image"
-          ></image>
-        </view>
-        <!-- 模拟数据图片，实际应由接口控制 -->
-        <view class="image-list" v-else>
-          <image src="https://louyu.zdocd.com/wxapp/static/image/case1.png" mode="aspectFill" class="detail-image"></image>
-          <image src="https://louyu.zdocd.com/wxapp/static/image/case1.png" mode="aspectFill" class="detail-image"></image>
+          <image v-for="(img, index) in detail.images" :key="index" :src="img" mode="aspectFill"
+            @click="previewImage(img, detail.images)" class="detail-image"></image>
         </view>
       </view>
 
@@ -61,7 +52,8 @@
 
         <!-- 地址 -->
         <view class="address-row">
-          <image class="address-icon" src="https://louyu.zdocd.com/wxapp/static/image/address.png" mode="widthFix"></image>
+          <image class="address-icon" src="https://louyu.zdocd.com/wxapp/static/image/address.png" mode="widthFix">
+          </image>
           <text class="address-text">{{ detail.house_address || detail.house_name }}</text>
         </view>
       </view>
@@ -70,14 +62,14 @@
       <view class="block-section bottom-desc-section">
         <view class="desc-content">
           <rich-text v-if="detail.coupon_desc" :nodes="formatRichText(detail.coupon_desc)"></rich-text>
-          <text v-else>{{ detail.coupon_desc}}</text>
+          <text v-else>{{ detail.coupon_desc }}</text>
         </view>
       </view>
 
     </scroll-view>
 
-    <!-- 底部悬浮按钮 -->
-    <view class="bottom-bar">
+    <!-- 底部悬浮按钮 (从我的供需进入时不显示) -->
+    <view class="bottom-bar" v-if="!isFromMy">
       <view class="message-btn" @click="toMessage">留言</view>
     </view>
   </view>
@@ -91,6 +83,7 @@ import CustomNavbar from "../../components/customNavbar.vue";
 
 const detail = ref({});
 let currentId = null;
+const isFromMy = ref(false);
 
 const formatRichText = (html) => {
   if (!html) return "";
@@ -130,6 +123,9 @@ const toMessage = () => {
 
 onLoad((options) => {
   console.log(options);
+  if (options.from === 'my') {
+    isFromMy.value = true;
+  }
   if (options.id) {
     currentId = options.id;
     getDetail(options.id);
@@ -149,8 +145,8 @@ onLoad((options) => {
 .content-scroll {
   flex: 1;
   overflow: hidden;
-  /* 预留底部按钮空间 */
-  padding-bottom: 90px;
+  /* 如果不显示底部按钮，则不需要那么大的底部内边距 */
+  padding-bottom: v-bind("isFromMy ? '20px' : '90px'");
 }
 
 .block-section {
@@ -182,7 +178,7 @@ onLoad((options) => {
   flex-wrap: wrap;
   gap: 12px;
   margin-top: 16px;
-  
+
   .detail-image {
     width: 100px;
     height: 100px;
@@ -217,7 +213,7 @@ onLoad((options) => {
     border: 1px solid #FF9681;
     border-radius: 6px;
     width: 148px;
-    
+
     .ticket-icon {
       width: 24px;
       height: 18px;
@@ -228,10 +224,12 @@ onLoad((options) => {
       justify-content: center;
       margin-right: 8px;
       position: relative;
-      image{
+
+      image {
         width: 30px;
         height: 30px;
       }
+
       text {
         font-size: 10px;
         color: #ffffff;
@@ -256,14 +254,14 @@ onLoad((options) => {
 .address-row {
   display: flex;
   align-items: flex-start;
-  
+
   .address-icon {
     width: 16px;
     height: 16px;
     margin-right: 6px;
     margin-top: 2px;
   }
-  
+
   .address-text {
     flex: 1;
     font-size: 13px;
@@ -288,7 +286,7 @@ onLoad((options) => {
   padding-bottom: env(safe-area-inset-bottom);
   border-top: 1px solid #f0f2f5;
   z-index: 100;
-  
+
   .message-btn {
     width: 100%;
     height: 44px;
@@ -300,7 +298,7 @@ onLoad((options) => {
     font-size: 16px;
     font-weight: 500;
     color: #ffffff;
-    
+
     &:active {
       opacity: 0.8;
     }

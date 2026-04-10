@@ -14,7 +14,6 @@
 
         <!-- 图片列表 (横向并排) -->
         <view class="image-list">
-         
           <image v-for="(img, imgIndex) in detail.images" :key="imgIndex" :src="img" mode="aspectFill" class="detail-image" @click="previewImage(img)"></image>
         </view>
       </view>

@@ -196,7 +196,11 @@ export const supply = {
     },
     // 更新供需
     update: (id, params) => {
-        return https.put(`/api/wxapp/supply-demand/update/${id}`, params)
+        return https.post(`/supply-demand/update/${id}`, params)
+    },
+    // 创建供需
+    create: (params) => {
+        return https.post(`/supply-demand/create`, params)
     },
     // 收到的留言数
     receivedCount: () => {

@@ -28,11 +28,13 @@
         <view class="image-list">
           <view class="image-item" v-for="(img, index) in formData.images" :key="index">
             <image :src="img" mode="aspectFill" @click="previewImage(index)"></image>
-            <view class="del-icon" @click="delImage(index)">×</view>
+            <view class="del-icon" @click="delImage(index)">
+              <image src="../../static/image/delete-img.png" mode="widthFix"></image>
+            </view>
           </view>
           <!-- 上传按钮 -->
           <view class="upload-btn" @click="chooseImage" v-if="formData.images.length < 9">
-            <view class="plus-icon"></view>
+            <image src="../../static/image/upload-add.png" mode="widthFix"></image>
           </view>
         </view>
       </view>
@@ -146,7 +148,7 @@ const submit = () => {
   // 构造提交参数
   const params = {
     ...formData.value,
-    images: formData.value.images.join(',')
+    images: formData.value.images
   };
 
   supply.messageCreate(params).then(response => {
@@ -226,8 +228,8 @@ const submit = () => {
 
     .image-item {
       position: relative;
-      width: 80px;
-      height: 80px;
+      width: 108px;
+      height: 108px;
       border-radius: 8px;
       overflow: hidden;
 
@@ -242,14 +244,11 @@ const submit = () => {
         right: 4px;
         width: 16px;
         height: 16px;
-        background-color: #ff5a5f;
-        color: #ffffff;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 12px;
-        line-height: 1;
+
+        image {
+          width: 16px;
+          height: 16px;
+        }
       }
     }
 
@@ -262,30 +261,9 @@ const submit = () => {
       align-items: center;
       justify-content: center;
 
-      .plus-icon {
+      image {
         width: 24px;
         height: 24px;
-        position: relative;
-
-        &::before,
-        &::after {
-          content: '';
-          position: absolute;
-          background-color: #3071f2;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-        }
-
-        &::before {
-          width: 100%;
-          height: 2px;
-        }
-
-        &::after {
-          width: 2px;
-          height: 100%;
-        }
       }
     }
   }
