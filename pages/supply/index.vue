@@ -2,21 +2,32 @@
   <view class="page-body">
     <view class="header-section">
       <view class="top-row">
-        <picker @change="onIndustryChange" :value="industryIndex" :range="industries" range-key="company_name">
-          <view class="industry-picker">
-            <text>{{ currentIndustryName }}</text>
-            <image src="https://louyu.zdocd.com/wxapp/static/image/right.png" mode="widthFix" class="down-icon" style="transform: rotate(90deg);"></image>
-          </view>
-        </picker>
-        <view class="my-supply" @click="toMySupply">
+        <view class="industry-picker" @click="toggleDropdown">
+          <text>{{ currentIndustryName }}</text>
+          <image src="https://louyu.zdocd.com/wxapp/static/image/right.png" mode="widthFix" class="down-icon"
+            :class="{ 'is-open': showDropdown }"></image>
+        </view>
+        <view class="my-supply" @click="toMySupply" v-if="userInfo.type === 3">
           <text>我的供需</text>
           <view class="badge" v-if="myCount > 0">{{ myCount > 99 ? '99+' : myCount }}</view>
         </view>
       </view>
 
+      <!-- 自定义下拉菜单 -->
+      <view class="dropdown-mask" v-if="showDropdown" @click="toggleDropdown"></view>
+      <view class="dropdown-menu" v-if="showDropdown">
+        <scroll-view scroll-y class="dropdown-scroll">
+          <view class="dropdown-item" v-for="(item, index) in industries" :key="index"
+            :class="{ active: industryIndex === index }" @click="selectIndustry(index)">
+            {{ item.company_name }}
+          </view>
+        </scroll-view>
+      </view>
+
       <view class="search-box">
         <uni-icons type="search" size="18" color="#A1A7B2"></uni-icons>
-        <input type="text" v-model="keyword" placeholder="输入供需关键词搜索" placeholder-class="placeholder-style" @confirm="onSearch" />
+        <input type="text" v-model="keyword" placeholder="输入供需关键词搜索" placeholder-class="placeholder-style"
+          @confirm="onSearch" />
       </view>
 
       <view class="tabs">
@@ -30,25 +41,24 @@
       <view class="items">
         <view class="item" v-for="(item, index) in list" :key="index" @click="toDetail(item.id)">
           <view class="item-title">{{ item.title }}</view>
-          
+
           <view class="item-footer">
             <view class="tag-row">
-              <view class="type-tag" :class="item.type == 1 ? 'supply' : 'demand'">{{ item.type == 1 ? '供应' : '求购' }}</view>
-              <view class="date">{{ item.created_at}}</view>
+              <view class="type-tag" :class="item.type == 1 ? 'supply' : 'demand'">{{ item.type == 1 ? '供应' : '求购' }}
+              </view>
+              <view class="date">{{ item.created_at }}</view>
               <view class="company">{{ item.company_name }}</view>
             </view>
           </view>
 
           <!-- 占位印章 -->
-          <view class="stamp" v-if="item.status_text">
-            <view class="stamp-border"></view>
-            <text>{{ item.status_text }}</text>
+          <view class="stamp" v-if="item.tags">
+            <image v-for="tag in item.tags" :key="tag.id" :src="tag.icon" mode="widthFix" class="stamp-image"></image>
           </view>
         </view>
       </view>
-      
+
       <view class="loading-status" v-if="loading">加载中...</view>
-      <view class="no-more" v-if="!loading && noMore">没有更多了</view>
       <view class="empty-state" v-if="!loading && list.length === 0">暂无数据</view>
     </scroll-view>
   </view>
@@ -58,10 +68,11 @@
 import { ref, onMounted, computed } from "vue";
 import { onLoad, onShow } from "@dcloudio/uni-app";
 import CustomNavbar from "../../components/customNavbar.vue";
-import { supply } from "../../utlis/https";
+import { supply, user } from "../../utlis/https";
 
 const industries = ref([{ id: '', company_name: '全部行业' }]);
 const industryIndex = ref(0);
+const showDropdown = ref(false);
 const keyword = ref('');
 const currentTab = ref(''); // '' = 全部, 1 = 供应, 2 = 求购
 const list = ref([]);
@@ -70,10 +81,12 @@ const pageSize = ref(10);
 const loading = ref(false);
 const noMore = ref(false);
 const myCount = ref(0);
+const userInfo = ref({}); // 保存用户信息
+const isLogin = ref(false);
 
 const currentIndustryName = computed(() => {
   console.log(industryIndex.value);
-  return industries.value[industryIndex.value]?.company_name || '全部行业';
+  return industries.value[industryIndex.value]?.company_name || '';
 });
 
 const getIndustries = () => {
@@ -105,37 +118,28 @@ const getList = (reset = false) => {
   if (loading.value || noMore.value) return;
 
   loading.value = true;
-  
+
   let params = {
     page: page.value,
     page_size: pageSize.value,
     keyword: keyword.value,
   };
-  
+
   if (currentTab.value !== '') {
     params.type = currentTab.value;
   }
-  
+
   const selectedIndustry = industries.value[industryIndex.value];
-  console.log(selectedIndustry);
   if (selectedIndustry && selectedIndustry.company_name !== '') {
     params.industry = selectedIndustry.company_name
+  }
+  if (currentIndustryName.value === '全部行业') {
+    delete params.industry;
   }
 
   supply.list(params).then(res => {
     if (res.code == 200 && res.data) {
       let newData = res.data.list || [];
-      // 如果后端没返回，临时造点假数据用于展示界面效果
-      if (newData.length === 0 && page.value === 1 && !keyword.value) {
-         newData = [
-           { id: 1, title: '供需标题供需标题供需标题', type: 1, created_at_text: '2024.10.30', company_name: '成都科大讯飞教育科技股份有限公司', status_text: '已对接' },
-           { id: 2, title: '供需标题供需标题供需标题供需标题供需标题供需标题供需标题供需', type: 1, created_at_text: '2024.10.30', company_name: '成都科大讯飞教育科技股份有限公司', status_text: '已对接' },
-           { id: 3, title: '供需标题供需标题供需标题', type: 2, created_at_text: '2024.10.30', company_name: '成都科大讯飞科技股份有限公司', status_text: '已对接' },
-           { id: 4, title: '供需标题供需标题供需标题', type: 2, created_at_text: '2024.10.30', company_name: '成都科大讯飞科技股份有限公司', status_text: '已对接' },
-           { id: 5, title: '供需标题供需标题供需标题', type: 2, created_at_text: '2024.10.30', company_name: '成都科大讯飞科技股份有限公司', status_text: '已对接' }
-         ];
-      }
-
       if (newData.length < pageSize.value) {
         noMore.value = true;
       }
@@ -149,8 +153,13 @@ const getList = (reset = false) => {
   });
 };
 
-const onIndustryChange = (e) => {
-  industryIndex.value = e.detail.value;
+const toggleDropdown = () => {
+  showDropdown.value = !showDropdown.value;
+};
+
+const selectIndustry = (index) => {
+  industryIndex.value = index;
+  showDropdown.value = false;
   getList(true);
 };
 
@@ -181,11 +190,25 @@ const toMySupply = () => {
   });
 };
 
+const getUserData = () => {
+  if (isLogin.value) {
+    user.getInfo().then(res => {
+      if (res.code === 200 && res.data) {
+        userInfo.value = res.data;
+      }
+    }).catch(err => {
+      console.log("获取用户信息失败", err);
+    });
+  }
+};
+
 onLoad(() => {
   getIndustries();
 });
 
 onShow(() => {
+  isLogin.value = uni.getStorageSync("isLogin") || false;
+  getUserData();
   getMyCount();
   getList(true);
 });
@@ -204,14 +227,17 @@ onShow(() => {
 .header-section {
   background: #ffffff;
   border-radius: 0 0 12px 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.02);
-  
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+  position: relative;
+  z-index: 100;
+
   .top-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 12px;
     height: 48px;
+    padding-right: 30px;
 
     .industry-picker {
       display: flex;
@@ -219,11 +245,17 @@ onShow(() => {
       font-size: 15px;
       color: #17181a;
       font-weight: 500;
-      
+
       .down-icon {
-        width: 10px;
+        width: 14px;
         margin-left: 6px;
         opacity: 0.6;
+        transform: rotate(90deg);
+        transition: transform 0.3s;
+
+        &.is-open {
+          transform: rotate(-90deg);
+        }
       }
     }
 
@@ -239,16 +271,60 @@ onShow(() => {
       .badge {
         position: absolute;
         top: -8px;
-        right: -20px;
-        background: #ff5252;
+        right: -11px;
+        background: #FF6B3A;
         color: #fff;
-        font-size: 10px;
-        padding: 0 4px;
+        font-size: 12px;
+        padding: 1px 4px;
         border-radius: 10px;
-        height: 16px;
-        line-height: 16px;
+        height: 14px;
+        line-height: 14px;
         min-width: 16px;
         text-align: center;
+        width: auto;
+      }
+    }
+  }
+
+  /* 自定义下拉菜单 */
+  .dropdown-mask {
+    position: absolute;
+    top: 48px;
+    /* header-section 中 top-row 的高度 */
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 99;
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    top: 48px;
+    left: 0;
+    width: 100%;
+    background: #ffffff;
+    z-index: 100;
+    max-height: 400px;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+
+    .dropdown-scroll {
+      max-height: 400px;
+    }
+
+    .dropdown-item {
+      padding: 16px 20px;
+      font-size: 15px;
+      color: #17181a;
+      border-bottom: 1px solid #f0f2f5;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &.active {
+        color: #3071f2;
       }
     }
   }
@@ -270,7 +346,7 @@ onShow(() => {
       font-size: 14px;
       color: #17181a;
     }
-    
+
     .placeholder-style {
       color: #a1a7b2;
       font-size: 14px;
@@ -280,7 +356,7 @@ onShow(() => {
   .tabs {
     display: flex;
     justify-content: space-around;
-    
+
     .tab-item {
       font-size: 15px;
       color: #5c5f66;
@@ -288,11 +364,11 @@ onShow(() => {
       position: relative;
       font-weight: 400;
       text-align: center;
-      
+
       &.active {
         color: #3071f2;
         font-weight: 600;
-        
+
         &::after {
           content: '';
           position: absolute;
@@ -343,32 +419,33 @@ onShow(() => {
         align-items: center;
         flex-wrap: wrap;
         gap: 12px;
-        
+
         .tag-row {
-           display: flex;
-           align-items: center;
-           justify-content: flex-start;
-            font-family: PingFang SC, PingFang SC;
-            font-weight: 400;
-            font-size: 13px;
-           .date{
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          font-family: PingFang SC, PingFang SC;
+          font-weight: 400;
+          font-size: 13px;
+
+          .date {
             padding: 0 8px;
             color: #8A8F99;
             border-left: 1px solid #CFD4E6;
             border-right: 1px solid #CFD4E6;
             width: auto;
-           }
+          }
         }
 
         .type-tag {
           font-size: 12px;
           width: 40px;
-          
-          
+
+
           &.supply {
             color: #3071f2;
           }
-          
+
           &.demand {
             color: #ff8a00;
           }
@@ -393,35 +470,23 @@ onShow(() => {
       .stamp {
         position: absolute;
         right: 10px;
-        top: 20px;
-        width: 60px;
-        height: 60px;
-        border: 2px dashed #42b983;
-        border-radius: 50%;
-        display: flex;
+        top: 10px;
         align-items: center;
         justify-content: center;
-        transform: rotate(-15deg);
-        opacity: 0.5;
-        
-        text {
-          color: #42b983;
-          font-size: 14px;
-          font-weight: bold;
+        width: auto;
+
+        .stamp-image {
+          width: 38px;
+          height: 38px;
         }
-        
-        .stamp-border {
-           position: absolute;
-           width: 50px;
-           height: 50px;
-           border: 1px solid #42b983;
-           border-radius: 50%;
-        }
+
       }
     }
   }
 
-  .loading-status, .no-more, .empty-state {
+  .loading-status,
+  .no-more,
+  .empty-state {
     text-align: center;
     font-size: 13px;
     color: #a1a7b2;

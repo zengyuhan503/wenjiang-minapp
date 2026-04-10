@@ -46,8 +46,7 @@
               <view class="file-list">
                 <view class="file-item" v-for="(file, fIndex) in msg.policy_file_list" :key="fIndex" @click="openFile(file)">
                   <view class="file-icon" :class="getFileTypeClass(file.name || file.title)">
-                    <image src="../../static/image/excel_icon (3).png" mode="widthFix" v-if="getFileTypeClass(file.name || file.title) === 'type-excel'"></image>
-                    <text v-else>{{ getFileExtension(file.name || file.title) }}</text>
+                    <image src="../../static/image/excel_icon (3).png" mode="widthFix"></image>
                   </view>
                   <view class="file-name">{{ file.name || file.title }}</view>
                 </view>
@@ -55,14 +54,11 @@
             </view>
 
             <!-- AI 文本回答卡片 -->
-            <view class="ai-card text-card" v-if="msg.content">
-              <view class="card-title" v-if="msg.content.length > 50">这是我为您搜索出的答案：</view>
+            <view class="ai-card text-card" v-if="msg.content || msg.isTyping">
+              <view class="card-title" >这是我为您搜索出的答案：</view>
               <view class="answer-text">
-                <text>{{ msg.content }}</text>
-              </view>
-              <!-- 模拟卡片右下角的上箭头小按钮 (设计图最后一条消息有此按钮) -->
-              <view class="action-btn" v-if="index === messageList.length - 1 && msg.content.length < 50">
-                <image src="https://louyu.zdocd.com/wxapp/static/image/up-arrow.png" mode="widthFix" class="action-icon"></image>
+                <text>{{ msg.isTyping ? msg.displayedContent : msg.content }}</text>
+                <text v-if="msg.isTyping" class="cursor">|</text>
               </view>
             </view>
 
@@ -88,7 +84,7 @@
           :show-confirm-bar="false"
         />
         <view class="send-btn" @click="sendMessage">
-          <image src="https://louyu.zdocd.com/wxapp/static/image/up-arrow.png" mode="widthFix" class="send-icon"></image>
+          <image src="../../static/image/up-arrow.png" mode="widthFix" class="send-icon"></image>
         </view>
       </view>
       <!-- 安全区适配 -->
@@ -182,6 +178,32 @@ const addMockData = () => {
   });
 };
 
+// 模拟打字机效果
+const typeMessage = (fullText, msgObj) => {
+  if (!fullText) {
+    msgObj.isTyping = false;
+    msgObj.content = '';
+    return;
+  }
+  let i = 0;
+  msgObj.isTyping = true;
+  msgObj.displayedContent = '';
+  
+  const timer = setInterval(() => {
+    if (i < fullText.length) {
+      msgObj.displayedContent += fullText.charAt(i);
+      i++;
+      // 随打字稍微滚动到底部，可根据需求调节频率
+      if (i % 3 === 0) scrollToBottom();
+    } else {
+      clearInterval(timer);
+      msgObj.isTyping = false;
+      msgObj.content = fullText;
+      scrollToBottom();
+    }
+  }, 30); // 30ms/字，打字速度
+};
+
 const sendMessage = () => {
   const content = inputValue.value.trim();
   if (!content || isLoading.value) return;
@@ -205,12 +227,19 @@ const sendMessage = () => {
       if (res.data.session_id) {
         sessionId.value = res.data.session_id;
       }
-      messageList.value.push({
+      
+      const newAiMsg = {
         type: 'ai',
-        content: res.data.answer,
+        content: '',
+        displayedContent: '',
+        isTyping: true,
         policy_file_list: res.data.policy_file_list || []
-      });
-      scrollToBottom();
+      };
+      messageList.value.push(newAiMsg);
+      
+      // 开始打字机动画
+      typeMessage(res.data.answer || '', newAiMsg);
+      
     } else {
       uni.showToast({ title: res.message || '获取回答失败', icon: 'none' });
     }
@@ -235,7 +264,44 @@ const scrollToBottom = () => {
 };
 
 const openFile = (file) => {
-  uni.showToast({ title: '打开文件: ' + (file.name || file.title), icon: 'none' });
+  const url = file.file_url;
+  if (!url) {
+    uni.showToast({ title: '文件地址不存在', icon: 'none' });
+    return;
+  }
+  
+  uni.showLoading({ title: '正在打开文件...' });
+  
+  uni.downloadFile({
+    url: url,
+    success: (res) => {
+      if (res.statusCode === 200) {
+        const filePath = res.tempFilePath;
+        uni.openDocument({
+          filePath: filePath,
+          showMenu: true,
+          success: () => {
+            console.log('打开文档成功');
+          },
+          fail: (err) => {
+            console.log('打开文档失败', err);
+            uni.showToast({ title: '打开文档失败', icon: 'none' });
+          },
+          complete: () => {
+            uni.hideLoading();
+          }
+        });
+      } else {
+        uni.hideLoading();
+        uni.showToast({ title: '文件下载失败', icon: 'none' });
+      }
+    },
+    fail: (err) => {
+      console.log('下载失败', err);
+      uni.hideLoading();
+      uni.showToast({ title: '文件下载失败', icon: 'none' });
+    }
+  });
 };
 
 const getFileExtension = (filename) => {
@@ -388,18 +454,18 @@ onLoad(() => {
 }
 
 .ai-card {
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.7);
   border-radius: 12px 12px 12px 12px;
-  padding: 16px;
+  padding: 12px;
   width: 85%;
-  border: 1px solid rgba(255,255,255,0.8);
   position: relative;
   
   .card-title {
     font-size: 14px;
     font-weight: 600;
     color: #17181a;
-    margin-bottom: 12px;
+    height: 48px;
+    line-height: 48px;
   }
 
   .action-btn {
@@ -421,6 +487,10 @@ onLoad(() => {
     }
   }
 }
+.text-card{
+  padding-top: 0;
+  border-radius: 2px 12px 12px 12px;
+}
 
 /* 文件列表 */
 .file-list {
@@ -428,23 +498,15 @@ onLoad(() => {
   flex-direction: column;
   
   .file-item {
+    height: 56px;
+    line-height: 56px;
     display: flex;
     align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px dashed #e8eaf0;
-    
-    &:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
-    }
-    &:first-child {
-      padding-top: 0;
-    }
+    border-top: 1px dashed #CFD4E6;
     
     .file-icon {
-      width: 28px;
-      height: 28px;
-      border-radius: 4px;
+      width: 32px;
+      height: 32px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -461,20 +523,11 @@ onLoad(() => {
         width: 100%;
         height: 100%;
       }
-      
-      &.type-pdf { background: #ff5a5f; }
-      &.type-txt { background: #40c4ff; }
-      &.type-doc { background: #3071f2; }
-      &.type-ppt { background: #ff9800; }
-      &.type-img { background: #4caf50; }
-      &.type-video { background: #651fff; }
-      &.type-excel { background: #00e676; }
-      &.type-unknown { background: #b0bec5; }
     }
     
     .file-name {
-      font-size: 13px;
-      color: #17181a;
+      font-size: 15px;
+      color: #17171A;
       flex: 1;
       white-space: nowrap;
       overflow: hidden;
@@ -486,9 +539,24 @@ onLoad(() => {
 /* 文本回答 */
 .answer-text {
   font-size: 14px;
-  color: #5c5f66;
+  color: #2E2F33;
   line-height: 24px;
   text-align: justify;
+  
+  .cursor {
+    display: inline-block;
+    width: 2px;
+    height: 14px;
+    background-color: #2E2F33;
+    margin-left: 2px;
+    animation: blink 1s step-end infinite;
+    vertical-align: middle;
+  }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
 
 /* 底部输入区 (大卡片样式) */
@@ -504,11 +572,11 @@ onLoad(() => {
   
   .input-card {
     background-color: #ffffff;
-    border-radius: 16px;
-    padding: 16px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    border-radius: 12px 12px 12px 12px;
+    padding: 10px ;
+    box-shadow: 0px 0px 16px 0px rgba(31,91,211,0.05);
     position: relative;
-    min-height: 100px;
+    min-height: 80px;
     display: flex;
     flex-direction: column;
     

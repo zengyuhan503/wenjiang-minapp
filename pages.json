@@ -62,6 +62,37 @@
 			"style": {
 				"navigationBarTitleText": "发布供需"
 			}
+		},
+		{
+			"path": "pages/user/setting",
+			"style": {
+				"navigationBarTitleText": "设置"
+			}
+		},
+		{
+			"path": "pages/user/password",
+			"style": {
+				"navigationBarTitleText": "修改登录密码"
+			}
+		},
+		{
+			"path": "pages/company/index",
+			"style": {
+				"navigationBarTitleText": "企业信息",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/company/coupon-desc",
+			"style": {
+				"navigationBarTitleText": "券说明"
+			}
+		},
+		{
+			"path": "pages/company/coupon-list",
+			"style": {
+				"navigationBarTitleText": "抵扣券设置"
+			}
 		}
 	],
 	"subPackages": [{
@@ -131,10 +162,11 @@
 		"backgroundColor": "#F8F8F8"
 	},
 	"tabBar": {
-		"color": "#8a8f99",
-		"selectedColor": "#3c9cff",
+		"color": "#747881",
+		"selectedColor": "#3071F2",
 		"backgroundColor": "#ffffff",
 		"borderStyle": "black",
+		"iconWidth": "18px",
 		"list": [
 			{
 				"pagePath": "pages/home/index",

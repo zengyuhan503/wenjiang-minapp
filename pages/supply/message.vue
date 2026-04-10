@@ -1,40 +1,26 @@
 <template>
   <view class="container">
-    
+
     <view class="form-wrapper">
       <!-- 联系人 -->
       <view class="form-item">
         <view class="label">联系人</view>
-        <input 
-          class="input-field" 
-          type="text" 
-          v-model="formData.contact_name" 
-          placeholder="请填写您的称呼" 
-          placeholder-class="placeholder-style"
-        />
+        <input class="input-field" type="text" v-model="formData.contact_name" placeholder="请填写您的称呼"
+          placeholder-class="placeholder-style" />
       </view>
 
       <!-- 联系电话 -->
       <view class="form-item">
         <view class="label">联系电话</view>
-        <input 
-          class="input-field" 
-          type="number" 
-          v-model="formData.contact_phone" 
-          placeholder="请填写联系电话" 
-          placeholder-class="placeholder-style"
-        />
+        <input class="input-field" type="number" v-model="formData.contact_phone" placeholder="请填写联系电话"
+          placeholder-class="placeholder-style" />
       </view>
 
       <!-- 留言内容 -->
       <view class="form-item">
         <view class="label">留言内容</view>
-        <textarea 
-          class="textarea-field" 
-          v-model="formData.content" 
-          placeholder="请简要阐述您的留言内容" 
-          placeholder-class="placeholder-style"
-        />
+        <textarea class="textarea-field" v-model="formData.content" placeholder="请简要阐述您的留言内容"
+          placeholder-class="placeholder-style" />
       </view>
 
       <!-- 图片上传 -->
@@ -59,6 +45,18 @@
 
     <!-- 弹窗组件 -->
     <SubmitResultDialog ref="submitDialog" />
+
+    <!-- 留言成功弹窗 -->
+    <view class="success-modal" v-if="showSuccessDialog">
+      <view class="modal-mask"></view>
+      <view class="modal-content">
+        <image class="success-icon" src="../../static/image/success-green.png" mode="aspectFit"></image>
+        <view class="modal-title">发布成功</view>
+        <view class="modal-desc">您的留言已通知企业！ <br> 如企业有意向会线下联系您，谢谢。</view>
+        <view class="modal-btn" @click="onCloseDialog">知道了</view>
+      </view>
+    </view>
+
   </view>
 </template>
 
@@ -70,6 +68,12 @@ import SubmitResultDialog from '../../components/SubmitResultDialog.vue';
 import CustomNavbar from "../../components/customNavbar.vue";
 
 const submitDialog = ref(null);
+const showSuccessDialog = ref(false);
+
+const onCloseDialog = () => {
+  showSuccessDialog.value = false;
+  uni.navigateBack();
+};
 
 const formData = ref({
   supply_demand_id: '',
@@ -138,7 +142,7 @@ const submit = () => {
   }
 
   uni.showLoading({ title: '提交中...' });
-  
+
   // 构造提交参数
   const params = {
     ...formData.value,
@@ -148,9 +152,7 @@ const submit = () => {
   supply.messageCreate(params).then(response => {
     uni.hideLoading();
     if (response.code === 200 || response.code === 0 || !response.code) {
-      submitDialog.value.showSubmitSuccess('留言提交成功', 2000, () => {
-        uni.navigateBack();
-      });
+      showSuccessDialog.value = true;
     } else {
       submitDialog.value.showSubmitFail(response.message || '提交失败');
     }
@@ -259,13 +261,14 @@ const submit = () => {
       display: flex;
       align-items: center;
       justify-content: center;
-      
+
       .plus-icon {
         width: 24px;
         height: 24px;
         position: relative;
-        
-        &::before, &::after {
+
+        &::before,
+        &::after {
           content: '';
           position: absolute;
           background-color: #3071f2;
@@ -273,12 +276,12 @@ const submit = () => {
           left: 50%;
           transform: translate(-50%, -50%);
         }
-        
+
         &::before {
           width: 100%;
           height: 2px;
         }
-        
+
         &::after {
           width: 2px;
           height: 100%;
@@ -300,11 +303,11 @@ const submit = () => {
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  padding: 0 20px;
+  padding: 16px 28px;
   padding-bottom: env(safe-area-inset-bottom);
   border-top: 1px solid #f0f2f5;
   z-index: 100;
-  
+
   .submit-btn {
     width: 100%;
     height: 44px;
@@ -316,9 +319,84 @@ const submit = () => {
     font-size: 16px;
     font-weight: 500;
     color: #ffffff;
-    
+
     &:active {
       opacity: 0.8;
+    }
+  }
+}
+
+/* 成功弹窗样式 */
+.success-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .modal-mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  .modal-content {
+    position: relative;
+    width: 311px;
+    background: #FFFFFF;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 24px 24px;
+    box-sizing: border-box;
+    z-index: 1000;
+
+    .success-icon {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 16px;
+    }
+
+    .modal-title {
+      font-size: 16px;
+      font-weight: 500;
+      color: #17181A;
+      line-height: 25px;
+      margin-bottom: 5px;
+      text-align: center;
+    }
+
+    .modal-desc {
+      font-size: 14px;
+      color: #5C5F66;
+      line-height: 22px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .modal-btn {
+      width: 200px;
+      height: 40px;
+      background: #3071f2;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 500;
+      color: #FFFFFF;
+
+      &:active {
+        opacity: 0.8;
+      }
     }
   }
 }

@@ -47,23 +47,11 @@
         <!-- 模拟抵扣券数据 -->
         <scroll-view scroll-x class="tickets-scroll" v-else>
           <view class="ticket-list">
-            <view class="ticket-item">
+            <view class="ticket-item" v-for="(coupon, index) in detail.coupon_list" :key="index">
               <view class="ticket-icon">
                 <image src="../../static/image/juan.png" mode="widthFix"></image>
               </view>
-              <text class="ticket-name">50抵扣券*5</text>
-            </view>
-            <view class="ticket-item">
-               <view class="ticket-icon">
-                <image src="../../static/image/juan.png" mode="widthFix"></image>
-              </view>
-              <text class="ticket-name">95折券*5</text>
-            </view>
-            <view class="ticket-item">
-               <view class="ticket-icon">
-                <image src="../../static/image/juan.png" mode="widthFix"></image>
-              </view>
-              <text class="ticket-name">9折券*5</text>
+              <text class="ticket-name">{{ coupon.name }}*{{ coupon.quantity }}</text>
             </view>
           </view>
         </scroll-view>
@@ -74,15 +62,15 @@
         <!-- 地址 -->
         <view class="address-row">
           <image class="address-icon" src="https://louyu.zdocd.com/wxapp/static/image/address.png" mode="widthFix"></image>
-          <text class="address-text">{{ detail.address || '成都市温江区光华大道三段1588号' }}</text>
+          <text class="address-text">{{ detail.house_address || detail.house_name }}</text>
         </view>
       </view>
 
       <!-- 模块3：底部文案补充 -->
       <view class="block-section bottom-desc-section">
         <view class="desc-content">
-          <rich-text v-if="detail.bottom_content" :nodes="formatRichText(detail.bottom_content)"></rich-text>
-          <text v-else>{{ detail.bottom_desc || '当前市场供需关系呈现结构性分化特征，整体供需格局趋于动态调整。部分领域供给相对充足，竞争较为充分，但有效供给与高品质需求仍存在一定差距。随着消费需求持续升级，市场对产品质量、服务体验和个性化供给提出更高要求。' }}</text>
+          <rich-text v-if="detail.coupon_desc" :nodes="formatRichText(detail.coupon_desc)"></rich-text>
+          <text v-else>{{ detail.coupon_desc}}</text>
         </view>
       </view>
 
@@ -116,7 +104,7 @@ const formatRichText = (html) => {
 
 const getDetail = (id) => {
   uni.showLoading({ title: '加载中...' });
-  supply.detail({ id }).then(res => {
+  supply.detail(id).then(res => {
     if (res.code == 200 && res.data) {
       detail.value = res.data;
     }
@@ -141,6 +129,7 @@ const toMessage = () => {
 };
 
 onLoad((options) => {
+  console.log(options);
   if (options.id) {
     currentId = options.id;
     getDetail(options.id);
@@ -223,9 +212,11 @@ onLoad((options) => {
     align-items: center;
     height: 48px;
     padding: 0 16px 0 10px;
-    background-color: rgba(255, 114, 82, 0.05);
-    border: 1px solid rgba(255, 114, 82, 0.3);
-    border-radius: 4px;
+    background: #FFF2F0;
+    border-radius: 6px 6px 6px 6px;
+    border: 1px solid #FF9681;
+    border-radius: 6px;
+    width: 148px;
     
     .ticket-icon {
       width: 24px;
@@ -293,7 +284,7 @@ onLoad((options) => {
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  padding: 0 20px;
+  padding: 16px 28px;
   padding-bottom: env(safe-area-inset-bottom);
   border-top: 1px solid #f0f2f5;
   z-index: 100;

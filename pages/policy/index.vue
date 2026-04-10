@@ -33,17 +33,16 @@
 
     <scroll-view scroll-y class="list-section" @scrolltolower="loadMore">
       <view class="list-container">
-        <view class="item" v-for="(item, index) in list" :key="index">
+        <view class="item" v-for="(item, index) in list" :key="index" @click="previewFile(item)">
           <view class="file-icon" :class="getFileTypeClass(item.name || item.title)">
             <image src="../../static/image/excel_icon (3).png" mode="widthFix"></image>
           </view>
           <view class="item-title">{{ item.name || item.title }}</view>
         </view>
-        
-        <view class="loading-status" v-if="loading">加载中...</view>
-        <view class="no-more" v-if="!loading && noMore">没有更多了</view>
-        <view class="empty-state" v-if="!loading && list.length === 0">暂无数据</view>
       </view>
+      <view class="loading-status" v-if="loading">加载中...</view>
+      <view class="no-more" v-if="!loading && noMore">没有更多了</view>
+      <view class="empty-state" v-if="!loading && list.length === 0">暂无数据</view>
     </scroll-view>
 
     <!-- 悬浮按钮 -->
@@ -176,6 +175,48 @@ const getFileTypeClass = (filename) => {
     case 'xlsx': return 'type-excel';
     default: return 'type-unknown';
   }
+};
+
+// 文件预览功能
+const previewFile = (item) => {
+  const url = item.file_url; // 请根据实际接口返回的URL字段名进行调整
+  if (!url) {
+    uni.showToast({ title: '文件地址不存在', icon: 'none' });
+    return;
+  }
+  
+  uni.showLoading({ title: '正在打开文件...' });
+  
+  uni.downloadFile({
+    url: url,
+    success: (res) => {
+      if (res.statusCode === 200) {
+        const filePath = res.tempFilePath;
+        uni.openDocument({
+          filePath: filePath,
+          showMenu: true, // 是否显示右上角菜单，允许用户分享或保存
+          success: () => {
+            console.log('打开文档成功');
+          },
+          fail: (err) => {
+            console.log('打开文档失败', err);
+            uni.showToast({ title: '打开文档失败', icon: 'none' });
+          },
+          complete: () => {
+            uni.hideLoading();
+          }
+        });
+      } else {
+        uni.hideLoading();
+        uni.showToast({ title: '文件下载失败', icon: 'none' });
+      }
+    },
+    fail: (err) => {
+      console.log('下载失败', err);
+      uni.hideLoading();
+      uni.showToast({ title: '文件下载失败', icon: 'none' });
+    }
+  });
 };
 
 onLoad(() => {

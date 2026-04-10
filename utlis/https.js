@@ -1,7 +1,7 @@
 import https from "./request"
 
-export const global={
-    config:()=>{
+export const global = {
+    config: () => {
         return https.get('/config')
     }
 }
@@ -34,6 +34,14 @@ export const user = {
     info: () => {
 
         return https.get('/user/info', {}, header)
+    },
+    // 获取个人信息
+    getInfo: () => {
+        return https.get('/user/getInfo')
+    },
+    // 修改密码
+    password: (params) => {
+        return https.put('/user/password', params)
     }
 }
 export const statistic = {
@@ -96,10 +104,32 @@ export const house = {
         let param = {
             house_id: params.house_id,
             floor_id: params.floor_id,
-            status: params.status ,
-            
+            status: params.status,
+
         }
         return https.get(`/house/company`, param)
+    }
+}
+export const coupon = {
+    // 抵扣券列表
+    list: () => {
+        return https.get('/coupon/list')
+    },
+    // 新增抵扣券
+    create: (params) => {
+        return https.post('/coupon/create', params)
+    },
+    // 删除抵扣券
+    delete: (id) => {
+        return https.del(`/coupon/delete?id=${id}`)
+    },
+    // 获取券说明
+    desc: () => {
+        return https.get('/coupon/desc')
+    },
+    // 保存券说明
+    descSave: (params) => {
+        return https.post('/coupon/desc/save', params)
     }
 }
 export const company = {
@@ -152,9 +182,21 @@ export const supply = {
     my: (params) => {
         return https.get('/supply-demand/my', params)
     },
+    // 我的供需详情
+    myDetail: (params) => {
+        return https.get('/supply-demand/my/detail', params)
+    },
+    // 删除供需
+    delete: (id) => {
+        return https.del(`/supply-demand/delete?id=${id}`)
+    },
     // 供需详情
     detail: (id) => {
         return https.get(`/supply-demand/detail?id=${id}`)
+    },
+    // 更新供需
+    update: (id, params) => {
+        return https.put(`/api/wxapp/supply-demand/update/${id}`, params)
     },
     // 收到的留言数
     receivedCount: () => {

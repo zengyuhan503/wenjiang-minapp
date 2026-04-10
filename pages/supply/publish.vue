@@ -100,7 +100,7 @@
       <view class="modal-content">
         <image class="success-icon" src="../../static/image/success-green.png" mode="aspectFit"></image>
         <view class="modal-title">发布成功</view>
-        <view class="modal-desc">您的留言已通知企业<br>，如企业有意向会线下联系您，谢谢。</view>
+        <view class="modal-desc">请等待平台审核！ <br> 可在“我的供需”中查看审核状态 <br> 以及企业向你提交的意向联系方式</view>
         <view class="modal-btn" @click="onCloseDialog">知道了</view>
       </view>
     </view>
@@ -110,7 +110,9 @@
 
 <script setup>
 import { ref, computed } from "vue";
+import { onLoad } from "@dcloudio/uni-app";
 import CustomNavbar from "../../components/customNavbar.vue";
+import { supply } from "../../utlis/https.js";
 
 const formData = ref({
   type: 1, // 1 供应，2 求购
@@ -119,7 +121,34 @@ const formData = ref({
   images: []
 });
 
+let currentId = null;
 const showSuccessDialog = ref(false);
+
+onLoad((options) => {
+  if (options.id) {
+    currentId = options.id;
+    getDetail(options.id);
+  }
+});
+
+const getDetail = (id) => {
+  uni.showLoading({ title: '加载中...' });
+  supply.detail(id).then(res => {
+    if (res.code == 200 && res.data) {
+      const data = res.data;
+      formData.value = {
+        type: data.type || 1,
+        title: data.title || "",
+        content: data.content || "",
+        images: data.images || []
+      };
+    }
+  }).catch(err => {
+    console.log("获取供需详情失败", err);
+  }).finally(() => {
+    uni.hideLoading();
+  });
+};
 
 // 表单验证，根据UI图，输入标题和内容后按钮才高亮
 const isFormValid = computed(() => {
@@ -156,19 +185,42 @@ const previewImage = (current) => {
 const onSubmit = () => {
   if (!isFormValid.value) return;
   
-  uni.showLoading({ title: '发布中...' });
+  uni.showLoading({ title: '提交中...' });
   
-  // 模拟接口请求
-  setTimeout(() => {
-    uni.hideLoading();
-    showSuccessDialog.value = true;
-  }, 1000);
+  if (currentId) {
+    // 更新
+    supply.update(currentId, formData.value).then(res => {
+      if (res.code == 200) {
+        showSuccessDialog.value = true;
+      } else {
+        uni.showToast({ title: res.message || '更新失败', icon: 'none' });
+      }
+    }).catch(err => {
+      console.log("更新供需失败", err);
+      uni.showToast({ title: '更新失败', icon: 'none' });
+    }).finally(() => {
+      uni.hideLoading();
+    });
+  } else {
+    // 新增（假设有个 create 接口，如果没有请告诉我，这里暂时模拟）
+    // supply.create(formData.value).then(...)
+    setTimeout(() => {
+      uni.hideLoading();
+      showSuccessDialog.value = true;
+    }, 1000);
+  }
 };
 
 const onCloseDialog = () => {
   showSuccessDialog.value = false;
-  // 弹窗关闭后返回上一页
-  uni.navigateBack();
+  
+  const pages = getCurrentPages();
+  if (pages.length > 1) {
+    uni.navigateBack();
+  } else {
+    // 弹窗关闭后返回上一页，如果当前是第一页，则跳转回供需列表
+    uni.switchTab({ url: '/pages/supply/index' });
+  }
 };
 </script>
 

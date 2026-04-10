@@ -1,15 +1,13 @@
 <template>
   <view class="page-container">
-    <CustomNavbar title="我的供需" />
-    
     <scroll-view scroll-y class="list-section" @scrolltolower="loadMore">
       <view class="list-container">
         <view class="item-card" v-for="(item, index) in list" :key="index" @click="goToDetail(item)">
           <!-- 状态角标 -->
           <view class="status-badge" >
-              <image v-if="item.status === 1" src="../../static/image/pending.png" class="status-icon" mode="aspectFit"></image>
-              <image v-if="item.status === 2" src="../../static/image/success.png" class="status-icon" mode="aspectFit"></image>
-              <image v-if="item.status === 3" src="../../static/image/fail.png" class="status-icon" mode="aspectFit"></image>
+              <image v-if="item.audit_status  == 0" src="../../static/image/pending.png" class="status-icon" mode="aspectFit"></image>
+              <image v-if="item.audit_status  == 1" src="../../static/image/success.png" class="status-icon" mode="aspectFit"></image>
+              <image v-if="item.audit_status  == 2" src="../../static/image/fail.png" class="status-icon" mode="aspectFit"></image>
           </view>
           
           <view class="item-title">{{ item.title }}</view>
@@ -23,21 +21,21 @@
             </view>
             
           <view class="action-group">
-            <image v-if="item.status === 'rejected'" src="../../static/image/edit_icon.png" class="action-icon" mode="aspectFit" @click.stop="onEdit(item)"></image>
+            <image v-if="item.audit_status  == 2" src="../../static/image/edit_icon.png" class="action-icon" mode="aspectFit" @click.stop="onEdit(item)"></image>
             <image src="../../static/image/delete_icon.png" class="action-icon" mode="aspectFit" @click.stop="onDelete(item)"></image>
           </view>
           </view>
 
           <!-- 留言数量提示 -->
           <view>
-          <view class="message-count" v-if="item.message_count > 0 && item.status === 2">
-            已有{{ item.message_count }}家企业留言
-            <view class="count-badge">{{ item.new_message_count > 99 ? '99+' : item.new_message_count }}</view>
-          </view>
+            <view class="message-count" v-if="item.message_company_count > 0 && item.audit_status == 1" @click.stop="goToMyDetail(item)">
+              已有{{ item.message_company_count }}家企业留言
+              <view class="count-badge">{{ item.unread_message_count > 99 ? '99+' : item.unread_message_count }}</view>
+            </view>
           </view>
 
           <!-- 拒绝原因 -->
-          <view class="reject-reason" v-if="item.status === 3">
+          <view class="reject-reason" v-if="item.audit_status == 2">
             拒绝原因：{{ item.reject_reason }}
           </view>
         </view>
@@ -98,7 +96,6 @@ const getList = (reset = false) => {
       
       // 添加模拟测试数据以展示 UI
       if (newData.length === 0 && page.value === 1) {
-        addMockData();
         newData = []; // 数据已经在 addMockData 中推入，这里清空避免重复逻辑
       } else {
         if (newData.length < pageSize.value) {
@@ -107,65 +104,24 @@ const getList = (reset = false) => {
         list.value = [...list.value, ...newData];
       }
       page.value++;
-    } else {
-      addMockData();
-    }
+    } 
   }).catch(err => {
     console.log("获取我的供需列表失败", err);
-    addMockData();
   }).finally(() => {
     loading.value = false;
   });
 };
 
-const addMockData = () => {
-  list.value = [
-    {
-      id: 1,
-      title: '供需标题供需标题供需标题',
-      type: 1,
-      date: '2024.10.30',
-      status: 1,
-      status_text: '审核中'
-    },
-    {
-      id: 2,
-      title: '供需标题供需标题供需标题',
-      type: 2,
-      date: '2024.10.30',
-      status: 2,
-      status_text: '已通过',
-      message_count: 6,
-      new_message_count: 8
-    },
-    {
-      id: 3,
-      title: '供需标题供需标题供需标题',
-      type: 2,
-      date: '2024.10.30',
-      status: 3,
-      status_text: '已拒绝',
-      reject_reason: '拒绝原因：列举如下列举如下列举如下列举如列举如下列举如下列举如下'
-    }
-  ];
-  noMore.value = true;
-};
 
 const loadMore = () => {
   getList();
 };
 
-const getStatusClass = (status) => {
-  switch (status) {
-    case 1: return 'status-blue';
-    case 2: return 'status-green';
-    case 3: return 'status-red';
-    default: return 'status-gray';
-  }
-};
 
 const onEdit = (item) => {
-  uni.showToast({ title: '编辑功能开发中', icon: 'none' });
+  uni.navigateTo({
+    url: `/pages/supply/publish?id=${item.id}`
+  });
 };
 
 const onDelete = (item) => {
@@ -180,25 +136,39 @@ const cancelDelete = () => {
 
 const confirmDelete = () => {
   if (itemToDelete.value) {
-    uni.showToast({ title: '删除成功', icon: 'none' });
     // TODO: 调用删除接口并刷新列表
-    
-    // 模拟本地删除
-    list.value = list.value.filter(i => i.id !== itemToDelete.value.id);
+    supply.delete(itemToDelete.value.id).then(res => {
+      if (res.code == 200) {
+        uni.showToast({ title: '删除成功', icon: 'none' });
+        getList();
+      } else {
+        uni.showToast({ title: res.msg || '删除失败' , icon: 'none' });
+      }
+    }).catch(err => {
+      console.log("删除供需失败", err);
+      uni.showToast({ title: err.msg || '删除失败' , icon: 'none' });
+    }).finally(() => {
+      showDeleteModal.value = false;
+      itemToDelete.value = null;
+    });
   }
-  showDeleteModal.value = false;
-  itemToDelete.value = null;
+};
+
+const goToDetail = (item) => {
+  uni.navigateTo({
+    url: `/pages/supply/detail?id=${item.id}`
+  });
+};
+
+const goToMyDetail = (item) => {
+  uni.navigateTo({
+    url: `/pages/supply/my-detail?id=${item.id}`
+  });
 };
 
 const onPublish = () => {
   uni.navigateTo({
     url: '/pages/supply/publish'
-  });
-};
-
-const goToDetail = (item) => {
-  uni.navigateTo({
-    url: `/pages/supply/my-detail?id=${item.id}`
   });
 };
 
@@ -369,7 +339,7 @@ onLoad(() => {
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  padding: 0 20px;
+  padding: 0 28px;
   padding-bottom: env(safe-area-inset-bottom);
   border-top: 1px solid #f0f2f5;
   z-index: 100;

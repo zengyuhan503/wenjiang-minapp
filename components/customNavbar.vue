@@ -62,7 +62,12 @@ function handleBack() {
   if (typeof props.onBack === "function") {
     props.onBack();
   } else {
-    uni.navigateBack();
+    const pages = getCurrentPages();
+    if (pages.length > 1) {
+      uni.navigateBack();
+    } else {
+      uni.switchTab({ url: "/pages/home/index" });
+    }
   }
 }
 

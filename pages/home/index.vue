@@ -1,21 +1,24 @@
 <template>
 	<view class="page-body">
-		<CustomNavbar ref="customNavBarRef" :onBack="goToOut" @changeOutModel="changeOutModel">
+		<CustomNavbar ref="customNavBarRef"  @changeOutModel="changeOutModel">
 			<template #back>
 				<template v-if="isLogin">
-					<image src="https://louyu.zdocd.com/wxapp/static/image/out.webp" mode="widthFix"
-						class="back-icon" />
+					<view class="back-icons">
+						<view class="back-icon-boxs" @click="goToOut">
+							<image src="https://louyu.zdocd.com/wxapp/static/image/out.webp" mode="widthFix"  />
+						</view>
+						<view class="back-icon-boxs" @click="toSetting">
+							<image  src="/static/image/setting.png"  mode="widthFix"  />
+						</view>
+						<view class="back-icon-boxs" v-if="userInfo.type === 3" @click="toCompany">
+							<image  src="/static/image/brand.png"  mode="widthFix"  />
+						</view>
+					</view>
 				</template>
 				<template v-else>
 					<view class="back-icons">
-					<image style="width: 32px; height: 32px" src="https://louyu.zdocd.com/wxapp/static/image/user.png"
-						mode="widthFix" class="back-icon" />
-						<view class="back-icon-boxs">
-							<image  src="/static/image/setting.png"  mode="widthFix"  />
-						</view>
-						<view class="back-icon-boxs">
-							<image  src="/static/image/brand.png"  mode="widthFix"  />
-						</view>
+						<image style="width: 32px; height: 32px" src="https://louyu.zdocd.com/wxapp/static/image/user.png"
+							mode="widthFix" class="back-icon" />
 					</view>
 				</template>
 			</template>
@@ -198,6 +201,7 @@ const customNavBarRef = ref(null);
 const isToLogin = ref(false);
 const showCanvas = ref(true);
 const statusBarHeight = ref(20);
+const userInfo = ref({}); // 保存用户信息
 const goToOut = () => {
 	showCanvas.value = false;
 	if (isLogin.value) {
@@ -244,6 +248,16 @@ const toNewsList = () => {
 	console.log("跳转");
 	wx.navigateTo({
 		url: "/package/news/index",
+	});
+};
+const toSetting = () => {
+	uni.navigateTo({
+		url: "/pages/user/setting",
+	});
+};
+const toCompany = () => {
+	uni.navigateTo({
+		url: "/pages/company/index",
 	});
 };
 
@@ -299,6 +313,19 @@ const getGlobalConfig = () => {
 		isToLogin.value = data.status == 1 ? true : false;
 	});
 };
+
+const getUserData = () => {
+	if (isLogin.value) {
+		user.getInfo().then(res => {
+			if (res.code === 200 && res.data) {
+				userInfo.value = res.data;
+			}
+		}).catch(err => {
+			console.log("获取用户信息失败", err);
+		});
+	}
+};
+
 onShow(() => {
 	getHomeStatistic();
 	getArticleList();
@@ -306,6 +333,7 @@ onShow(() => {
 	isLogin.value = uni.getStorageSync("isLogin") || false;
 	refreshToken();
 	getGlobalConfig();
+	getUserData(); // 获取用户信息，用于判断显示企业图标
 	const sys = uni.getSystemInfoSync()
 	statusBarHeight.value = sys.statusBarHeight;
 	statusBarHeight.value = sys.statusBarHeight + 44 + 14;
