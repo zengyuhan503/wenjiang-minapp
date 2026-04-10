@@ -250,6 +250,7 @@ onShow(() => {
   }
 
   .info {
+    padding-left: 20px;
     flex: 1;
     overflow: hidden;
     
@@ -257,7 +258,7 @@ onShow(() => {
       font-size: 15px;
       font-weight: 600;
       color: #17181a;
-      margin-bottom: 8px;
+      margin-bottom: 4px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;

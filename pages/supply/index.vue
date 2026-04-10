@@ -222,6 +222,8 @@ onShow(() => {
   background: #f3f5fa;
   display: flex;
   flex-direction: column;
+  border-top: 1px solid #E1E5EA;
+
 }
 
 .header-section {

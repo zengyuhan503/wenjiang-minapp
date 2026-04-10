@@ -46,6 +46,7 @@ provide("showSubmitFail", showSubmitFail);
 view {
   width: 100%;
   box-sizing: border-box;
+  font-family: PingFang SC, PingFang SC;
 }
 
 page {
