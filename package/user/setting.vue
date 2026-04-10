@@ -3,7 +3,7 @@
     <view class="list-group">
       <view class="list-item">
         <text class="label">账号</text>
-        <text class="value">{{ maskedPhone }}</text>
+        <text class="value" style="color: #2E2F33;">{{ maskedPhone }}</text>
       </view>
       <view class="list-item" @click="toPassword">
         <text class="label">登录密码</text>

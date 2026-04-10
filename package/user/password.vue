@@ -128,12 +128,11 @@ const onCloseDialog = () => {
 }
 
 .form-container {
-  padding: 12px;
+  padding:0 12px;
   flex: 1;
 }
 
 .form-item {
-  margin-bottom: 24px;
   
   .label {
     font-size: 15px;
