@@ -1,1 +1,0 @@
-<view><echart wx:if="{{c}}" class="r" u-r="echartRef" bindready="{{b}}" u-i="64238a9e-0" bind:__l="__l" u-p="{{c}}"/></view>

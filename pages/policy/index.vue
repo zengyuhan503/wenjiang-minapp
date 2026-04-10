@@ -141,7 +141,7 @@ const loadMore = () => {
 
 const onFabClick = () => {
   uni.navigateTo({
-    url: '/pages/policy/ai'
+    url: '/package/policy/ai'
   });
 };
 

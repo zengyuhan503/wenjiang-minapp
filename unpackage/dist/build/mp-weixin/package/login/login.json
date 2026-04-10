@@ -1,9 +1,0 @@
-{
-  "navigationBarTitleText": " ",
-  "navigationStyle": "custom",
-  "usingComponents": {
-    "uni-easyinput": "../../uni_modules/uni-easyinput/components/uni-easyinput/uni-easyinput",
-    "submit-result-dialog": "../../components/SubmitResultDialog",
-    "custom-navbar": "../../components/customNavbar"
-  }
-}

@@ -180,13 +180,13 @@ const loadMore = () => {
 const toDetail = (id) => {
   if (!id) return;
   uni.navigateTo({
-    url: `/pages/supply/detail?id=${id}`
+    url: `/package/supply/detail?id=${id}`
   });
 };
 
 const toMySupply = () => {
   uni.navigateTo({
-    url: '/pages/supply/my'
+    url: '/package/supply/my'
   });
 };
 

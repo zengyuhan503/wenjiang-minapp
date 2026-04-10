@@ -1,6 +1,0 @@
-{
-  "navigationBarTitleText": "最新资讯详情",
-  "usingComponents": {
-    "video-wrapper": "../../components/videoWrapper"
-  }
-}

@@ -252,12 +252,12 @@ const toNewsList = () => {
 };
 const toSetting = () => {
 	uni.navigateTo({
-		url: "/pages/user/setting",
+		url: "/package/user/setting",
 	});
 };
 const toCompany = () => {
 	uni.navigateTo({
-		url: "/pages/company/index",
+		url: "/package/company/index",
 	});
 };
 
@@ -421,6 +421,7 @@ onShow(() => {
 	gap: 8px;
 	align-items: center;
 	width:200px;
+	padding-left: 12px;
 }
 .back-icon-boxs{
 	width: 32px;

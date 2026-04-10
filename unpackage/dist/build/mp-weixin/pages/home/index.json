@@ -1,8 +1,0 @@
-{
-  "navigationBarTitleText": " ",
-  "navigationStyle": "custom",
-  "usingComponents": {
-    "custom-navbar": "../../components/customNavbar",
-    "ring-charts": "../../components/ringCharts"
-  }
-}
