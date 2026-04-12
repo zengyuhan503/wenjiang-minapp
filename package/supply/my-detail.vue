@@ -33,7 +33,7 @@
             <view class="msg-contact">
               <text class="contact-text">联系人：{{ msg.contact_name }}（{{ msg.contact_phone }}）</text>
               <!-- 电话icon占位，您可以后续替换该图片 -->
-              <image class="phone-icon" src="../../static/image/callphone-icon.png" mode="aspectFit" @click="makePhoneCall(msg.contact_phone)"></image>
+              <image class="phone-icon" src="https://louyu.zdocd.com/wxapp/static/image/callphone-icon.png" mode="aspectFit" @click="makePhoneCall(msg.contact_phone)"></image>
             </view>
             
             <view class="msg-content-wrapper" v-if="msg.content || (msg.images && msg.images.length > 0)">

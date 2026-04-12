@@ -15,13 +15,13 @@
             <image 
               v-if="formData.type === 1" 
               class="radio-icon" 
-              src="../../static/image/radio-checked.png" 
+              src="https://louyu.zdocd.com/wxapp/static/image/radio-checked.png" 
               mode="aspectFit"
             ></image>
             <image 
               v-else 
               class="radio-icon" 
-              src="../../static/image/radio-unchecked.png" 
+              src="https://louyu.zdocd.com/wxapp/static/image/radio-unchecked.png" 
               mode="aspectFit"
             ></image>
           </view>
@@ -35,13 +35,13 @@
             <image 
               v-if="formData.type === 2" 
               class="radio-icon" 
-              src="../../static/image/radio-checked.png" 
+              src="https://louyu.zdocd.com/wxapp/static/image/radio-checked.png" 
               mode="aspectFit"
             ></image>
             <image 
               v-else 
               class="radio-icon" 
-              src="../../static/image/radio-unchecked.png" 
+              src="https://louyu.zdocd.com/wxapp/static/image/radio-unchecked.png" 
               mode="aspectFit"
             ></image>
           </view>
@@ -77,11 +77,11 @@
         <view class="image-list">
           <view class="image-item" v-for="(img, index) in formData.images" :key="index">
             <image :src="img" mode="aspectFill" class="uploaded-img" @click="previewImage(img)"></image>
-            <image src="../../static/image/delete-img.png" class="delete-icon" mode="aspectFit" @click.stop="removeImage(index)"></image>
+            <image src="https://louyu.zdocd.com/wxapp/static/image/delete-img.png" class="delete-icon" mode="aspectFit" @click.stop="removeImage(index)"></image>
           </view>
           
           <view class="upload-btn" @click="chooseImage" v-if="formData.images.length < 9">
-            <image src="../../static/image/upload-add.png" class="upload-icon" mode="aspectFit"></image>
+            <image src="https://louyu.zdocd.com/wxapp/static/image/upload-add.png" class="upload-icon" mode="aspectFit"></image>
           </view>
         </view>
       </view>

@@ -4,7 +4,7 @@
       <view class="coupon-list">
         <view class="coupon-item" v-for="(item, index) in list" :key="index">
           <view class="left-icon">
-            <image src="../../static/image/juan.png" mode="aspectFit"></image>
+            <image src="https://louyu.zdocd.com/wxapp/static/image/juan.png" mode="aspectFit"></image>
           </view>
           
           <!-- 中间的虚线分隔 -->
@@ -15,7 +15,7 @@
             <view class="count">共 <text class="num">{{ item.quantity }}</text> 张</view>
           </view>
           <view class="action" @click="confirmDelete(item)">
-            <image src="../../static/image/delete_icon.png" mode="aspectFit"></image>
+            <image src="https://louyu.zdocd.com/wxapp/static/image/delete_icon.png" mode="aspectFit"></image>
           </view>
         </view>
         
@@ -33,7 +33,7 @@
       <view class="add-modal">
         <view class="modal-header">
           <text class="title">新增抵扣券</text>
-          <image src="../../static/image/close-icon.png" class="close-icon" @click="showAdd = false"></image>
+          <image src="https://louyu.zdocd.com/wxapp/static/image/close-icon.png" class="close-icon" @click="showAdd = false"></image>
         </view>
         <view class="modal-body">
           <view class="form-item">
@@ -56,7 +56,7 @@
     <view class="modal-mask" v-if="showDeleteModal">
       <view class="delete-modal" @click="cancelDelete">
         <view class="modal-content">
-          <image class="warning-icon" src="../../static/image/warning-icon.png" mode="aspectFit"></image>
+          <image class="warning-icon" src="https://louyu.zdocd.com/wxapp/static/image/warning-icon.png" mode="aspectFit"></image>
           <view class="modal-title">确认删除此券？</view>
           <view class="modal-actions">
             <view class="btn-cancel" @click="cancelDelete">取消</view>

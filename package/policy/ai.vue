@@ -3,7 +3,7 @@
     <!-- 顶部导航栏，带蓝色渐变背景 -->
     <view class="navbar-wrapper">
       <view class="nav-bg">
-        <image src="../../static/tabbar/ai_back.png" mode="widthFix" class="bg-img"></image>
+        <image src="https://louyu.zdocd.com/wxapp/static/tabbar/ai_back.png" mode="widthFix" class="bg-img"></image>
       </view>
     </view>
     <CustomNavbar title="温小楼" titleColor="#17181a" bgColor="transparent" />
@@ -21,7 +21,7 @@
         <!-- 欢迎卡片 (固定显示在最顶部) -->
         <view class="chat-item welcome-item" id="msg-welcome">
           <view class="welcome-card">
-            <image class="robot-avatar" src="../../static/image/ai.png" mode="aspectFit"></image>
+            <image class="robot-avatar" src="https://louyu.zdocd.com/wxapp/static/image/ai.png" mode="aspectFit"></image>
             <view class="welcome-title">Hi~</view>
             <view class="welcome-subtitle">我是温小楼Ai政策小助理~</view>
             <view class="welcome-desc">您可以输入对政策的疑问，我可以快速回答你或者给你推送相关政策文件哦~</view>
@@ -47,7 +47,7 @@
               <view class="file-list">
                 <view class="file-item" v-for="(file, fIndex) in msg.policy_file_list" :key="fIndex" @click="openFile(file)">
                   <view class="file-icon" :class="getFileTypeClass(file.name || file.title)">
-                    <image src="../../static/image/excel_icon (3).png" mode="widthFix"></image>
+                    <image src="https://louyu.zdocd.com/wxapp/static/image/excel_icon (3).png" mode="widthFix"></image>
                   </view>
                   <view class="file-name">{{ file.name || file.title }}</view>
                 </view>
@@ -95,7 +95,7 @@
           @confirm="sendMessage"
         />
         <view class="send-btn" @click="sendMessage" v-if="!isGenerating">
-          <image src="../../static/image/up-arrow.png" mode="widthFix" class="send-icon"></image>
+          <image src="https://louyu.zdocd.com/wxapp/static/image/up-arrow.png" mode="widthFix" class="send-icon"></image>
         </view>
         <view class="send-btn stop-btn" @click="stopGenerating" v-else>
           <view class="stop-icon"></view>

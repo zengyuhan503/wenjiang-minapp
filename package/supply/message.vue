@@ -29,12 +29,12 @@
           <view class="image-item" v-for="(img, index) in formData.images" :key="index">
             <image :src="img" mode="aspectFill" @click="previewImage(index)"></image>
             <view class="del-icon" @click="delImage(index)">
-              <image src="../../static/image/delete-img.png" mode="widthFix"></image>
+              <image src="https://louyu.zdocd.com/wxapp/static/image/delete-img.png" mode="widthFix"></image>
             </view>
           </view>
           <!-- 上传按钮 -->
           <view class="upload-btn" @click="chooseImage" v-if="formData.images.length < 9">
-            <image src="../../static/image/upload-add.png" mode="widthFix"></image>
+            <image src="https://louyu.zdocd.com/wxapp/static/image/upload-add.png" mode="widthFix"></image>
           </view>
         </view>
       </view>

@@ -2,7 +2,7 @@
   <view class="page-body">
     <!-- 蓝色渐变背景 -->
     <view class="blue-bg">
-      <image src="../../static/image/policy_back.png" mode="widthFix"></image>
+      <image src="https://louyu.zdocd.com/wxapp/static/image/policy_back.png" mode="widthFix"></image>
     </view>
     <CustomNavbar title="政策帮" titleColor="#ffffff" bgColor="transparent" />
 
@@ -35,7 +35,7 @@
       <view class="list-container">
         <view class="item" v-for="(item, index) in list" :key="index" @click="previewFile(item)">
           <view class="file-icon" :class="getFileTypeClass(item.name || item.title)">
-            <image src="../../static/image/excel_icon (3).png" mode="widthFix"></image>
+            <image src="https://louyu.zdocd.com/wxapp/static/image/excel_icon (3).png" mode="widthFix"></image>
           </view>
           <view class="item-title">{{ item.name || item.title }}</view>
         </view>
@@ -47,7 +47,7 @@
 
     <!-- 悬浮按钮 -->
     <view class="fab-btn" @click="onFabClick">
-      <image src="../../static/image/ai.png" mode="widthFix"></image>
+      <image src="https://louyu.zdocd.com/wxapp/static/image/ai.png" mode="widthFix"></image>
       <text>温小楼</text>
     </view>
   </view>
@@ -245,7 +245,7 @@ onShow(() => {
   left: 0;
   width: 100%;
   height: 220px;
-  background: url("../../static/image/policy_back.png");
+  background: url("https://louyu.zdocd.com/wxapp/static/image/policy_back.png");
   z-index: 0;
   image{
     width: 100%;

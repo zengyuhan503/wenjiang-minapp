@@ -3,8 +3,8 @@
     <CustomNavbar />
     <view class="header-bg">
       <view class="company-info">
-        <image class="back" src="../../static/image/company-back.png" mode="widthFix"></image>
-        <image src="../../static/image/company-house.png" class="house-icon" mode="aspectFit"></image>
+        <image class="back" src="https://louyu.zdocd.com/wxapp/static/image/company-back.png" mode="widthFix"></image>
+        <image src="https://louyu.zdocd.com/wxapp/static/image/company-house.png" class="house-icon" mode="aspectFit"></image>
         <view class="company-name">{{ companyName }}</view>
       </view>
     </view>

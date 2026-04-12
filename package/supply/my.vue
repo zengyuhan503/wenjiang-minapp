@@ -5,9 +5,9 @@
         <view class="item-card" v-for="(item, index) in list" :key="index" @click="goToDetail(item)">
           <!-- 状态角标 -->
           <view class="status-badge" >
-              <image v-if="item.audit_status  == 0" src="../../static/image/pending.png" class="status-icon" mode="aspectFit"></image>
-              <image v-if="item.audit_status  == 1" src="../../static/image/success.png" class="status-icon" mode="aspectFit"></image>
-              <image v-if="item.audit_status  == 2" src="../../static/image/fail.png" class="status-icon" mode="aspectFit"></image>
+              <image v-if="item.audit_status  == 0" src="https://louyu.zdocd.com/wxapp/static/image/pending.png" class="status-icon" mode="aspectFit"></image>
+              <image v-if="item.audit_status  == 1" src="https://louyu.zdocd.com/wxapp/static/image/success.png" class="status-icon" mode="aspectFit"></image>
+              <image v-if="item.audit_status  == 2" src="https://louyu.zdocd.com/wxapp/static/image/fail.png" class="status-icon" mode="aspectFit"></image>
           </view>
           
           <view class="item-title">{{ item.title }}</view>
@@ -21,8 +21,8 @@
             </view>
             
           <view class="action-group">
-            <image v-if="item.audit_status  == 2" src="../../static/image/edit_icon.png" class="action-icon" mode="aspectFit" @click.stop="onEdit(item)"></image>
-            <image src="../../static/image/delete_icon.png" class="action-icon" mode="aspectFit" @click.stop="onDelete(item)"></image>
+            <image v-if="item.audit_status  == 2" src="https://louyu.zdocd.com/wxapp/static/image/edit_icon.png" class="action-icon" mode="aspectFit" @click.stop="onEdit(item)"></image>
+            <image src="https://louyu.zdocd.com/wxapp/static/image/delete_icon.png" class="action-icon" mode="aspectFit" @click.stop="onDelete(item)"></image>
           </view>
           </view>
 
@@ -54,7 +54,7 @@
     <view class="delete-modal" v-if="showDeleteModal">
       <view class="modal-mask" @click="cancelDelete"></view>
       <view class="modal-content">
-        <image class="warning-icon" src="../../static/image/warning-icon.png" mode="aspectFit"></image>
+        <image class="warning-icon" src="https://louyu.zdocd.com/wxapp/static/image/warning-icon.png" mode="aspectFit"></image>
         <view class="modal-title">确认删除此供需消息？</view>
         <view class="modal-actions">
           <view class="btn-cancel" @click="cancelDelete">取消</view>

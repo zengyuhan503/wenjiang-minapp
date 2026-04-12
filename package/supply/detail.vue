@@ -39,7 +39,7 @@
           <view class="ticket-list">
             <view class="ticket-item" v-for="(coupon, index) in detail.coupon_list" :key="index">
               <view class="ticket-icon">
-                <image src="../../static/image/juan.png" mode="widthFix"></image>
+                <image src="https://louyu.zdocd.com/wxapp/static/image/juan.png" mode="widthFix"></image>
               </view>
               <text class="ticket-name">{{ coupon.name }}*{{ coupon.quantity }}</text>
             </view>
