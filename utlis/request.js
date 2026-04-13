@@ -20,7 +20,7 @@ const refreshAndRetry = async (originalRequestFn) => {
         uni.removeStorageSync("isLogin");
         uni.showToast({ title: '登录过期', icon: 'none' });
         setTimeout(() => {
-            uni.navigateTo({ url: '/package/login/login' });
+            uni.reLaunch({ url: '/package/login/login' });
         }, 1500);
         return Promise.reject('登录已过期');
     }
