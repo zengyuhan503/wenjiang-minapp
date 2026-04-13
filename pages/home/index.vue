@@ -11,7 +11,7 @@
 							<image src="https://louyu.zdocd.com/wxapp/static/image/setting.png" mode="widthFix" />
 						</view>
 						<view class="back-icon-boxs" v-if="isLogin && userInfo?.type === 3" @click="toCompany">
-							<image src="https://louyu.zdocd.com/wxapp/static/image/company.png" mode="widthFix" />
+							<image src="https://louyu.zdocd.com/wxapp/static/image/brand.png" mode="widthFix" />
 						</view>
 					</view>
 				</template>
@@ -204,6 +204,7 @@ const showCanvas = ref(true);
 const statusBarHeight = ref(20);
 const userInfo = ref({}); // 保存用户信息
 const goToOut = () => {
+	console.log("退出登录");
 	showCanvas.value = false;
 	if (isLogin.value) {
 		customNavBarRef.value.showOutModel();
