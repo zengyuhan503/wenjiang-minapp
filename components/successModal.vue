@@ -2,7 +2,7 @@
   <view class="success-modal" v-if="visible">
     <view class="modal-mask"></view>
     <view class="modal-content">
-      <image class="success-icon" src="../static/image/success-green.png" mode="aspectFit"></image>
+      <image class="success-icon" src="https://louyu.zdocd.com/wxapp/static/image/success-green.png" mode="aspectFit"></image>
       <view class="modal-title">{{ title }}</view>
       <view class="modal-desc">
         <slot>

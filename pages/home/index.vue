@@ -1,24 +1,25 @@
 <template>
 	<view class="page-body">
-		<CustomNavbar ref="customNavBarRef"  @changeOutModel="changeOutModel">
+		<CustomNavbar ref="customNavBarRef" @changeOutModel="changeOutModel">
 			<template #back>
 				<template v-if="isLogin">
 					<view class="back-icons">
 						<view class="back-icon-boxs" @click="goToOut">
-							<image src="https://louyu.zdocd.com/wxapp/static/image/out.webp" mode="widthFix"  />
+							<image src="https://louyu.zdocd.com/wxapp/static/image/out.webp" mode="widthFix" />
 						</view>
 						<view class="back-icon-boxs" @click="toSetting">
-							<image  src="/static/image/setting.png"  mode="widthFix"  />
+							<image src="https://louyu.zdocd.com/wxapp/static/image/setting.png" mode="widthFix" />
 						</view>
-						<view class="back-icon-boxs" v-if="userInfo.type === 3" @click="toCompany">
-							<image  src="/static/image/brand.png"  mode="widthFix"  />
+						<view class="back-icon-boxs" v-if="isLogin && userInfo?.type === 3" @click="toCompany">
+							<image src="https://louyu.zdocd.com/wxapp/static/image/company.png" mode="widthFix" />
 						</view>
 					</view>
 				</template>
 				<template v-else>
 					<view class="back-icons">
-						<image style="width: 32px; height: 32px" src="https://louyu.zdocd.com/wxapp/static/image/user.png"
-							mode="widthFix" class="back-icon" />
+						<image style="width: 32px; height: 32px"
+							src="https://louyu.zdocd.com/wxapp/static/image/user.png" mode="widthFix"
+							class="back-icon" />
 					</view>
 				</template>
 			</template>
@@ -294,17 +295,19 @@ const getRentalList = () => {
 		});
 	});
 };
-const refreshToken = () => {
-	if (isLogin.value) {
-		user
-			.refresh()
-			.then((res) => {
-				console.log(res);
-			})
-			.catch((err) => {
-				isLogin.value = uni.getStorageSync("isLogin") || false;
-			});
-	}
+const refreshToken = async () => {
+	// if (isLogin.value) {
+	user
+		.refresh()
+		.then((res) => {
+			console.log(res);
+			isLogin.value = true;
+			uni.setStorageSync("isLogin", true);
+		})
+		.catch((err) => {
+			isLogin.value = uni.getStorageSync("isLogin") || false;
+		});
+	// }
 };
 const getGlobalConfig = () => {
 	global.config().then((res) => {
@@ -321,17 +324,22 @@ const getUserData = () => {
 				userInfo.value = res.data;
 			}
 		}).catch(err => {
+			// 如果由于 token 过期或未登录等原因报错，静默处理或重置
 			console.log("获取用户信息失败", err);
+			userInfo.value = {};
 		});
+	} else {
+		userInfo.value = {};
 	}
 };
 
-onShow(() => {
+onShow(async () => {
 	getHomeStatistic();
 	getArticleList();
 	getRentalList();
 	isLogin.value = uni.getStorageSync("isLogin") || false;
-	refreshToken();
+	console.log("isLogin.value", isLogin.value);
+	await refreshToken();
 	getGlobalConfig();
 	getUserData(); // 获取用户信息，用于判断显示企业图标
 	const sys = uni.getSystemInfoSync()
@@ -416,26 +424,29 @@ onShow(() => {
 	background: #f3f5fa;
 }
 
-.back-icons{
-	display:flex;
+.back-icons {
+	display: flex;
 	gap: 8px;
 	align-items: center;
-	width:200px;
+	width: 200px;
 	padding-left: 12px;
 }
-.back-icon-boxs{
+
+.back-icon-boxs {
 	width: 32px;
 	height: 32px;
 	background: rgba(255, 255, 255, 0.2);
 	border-radius: 16px 16px 16px 16px;
-	display:flex;
+	display: flex;
 	justify-content: center;
 	align-items: center;
 }
+
 .back-icon {
 	width: 18px;
 }
-.back-icon-boxs image{
+
+.back-icon-boxs image {
 	width: 18px;
 }
 

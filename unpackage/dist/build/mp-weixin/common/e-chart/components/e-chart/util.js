@@ -1,0 +1,1 @@
+"use strict";const n=require("../../../vendor.js");exports.addUnitRpx=function(n){return isNaN(Number(n))?n:`${n}rpx`},exports.getRandomId=function(){return`chart_${Math.random().toString(36).substring(2,16)}`},exports.getWindowInfo=function(){return n.index.getWindowInfo&&n.index.canIUse("getWindowInfo")?n.index.getWindowInfo():n.index.getSystemInfoSync()};

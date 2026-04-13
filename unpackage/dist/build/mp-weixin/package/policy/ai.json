@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "温小楼",
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "custom-navbar": "../../components/customNavbar"
+  }
+}

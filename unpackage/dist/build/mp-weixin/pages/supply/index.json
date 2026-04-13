@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "供需",
+  "usingComponents": {
+    "uni-icons": "../../uni_modules/uni-icons/components/uni-icons/uni-icons"
+  }
+}

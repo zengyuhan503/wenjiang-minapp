@@ -36,7 +36,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted,defineExpose,defineProps,defineEmits } from "vue";
 
 const props = defineProps({
   title: { type: String, default: "" },

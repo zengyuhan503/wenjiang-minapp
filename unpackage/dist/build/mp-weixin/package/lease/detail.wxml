@@ -1,0 +1,1 @@
+<view class="page-body data-v-e2796211"><view class="page-content data-v-e2796211"><view class="title data-v-e2796211">{{a}}</view><rich-text class="data-v-e2796211" nodes="{{b}}"></rich-text></view></view><view class="countus data-v-e2796211"><view class="btn data-v-e2796211" bindtap="{{c}}">招租咨询</view></view>

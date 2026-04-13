@@ -1,0 +1,1 @@
+<view wx:if="{{a}}" class="dialog"><view class="content"><image src="https://louyu.zdocd.com/wxapp/static/image/success.webp" mode="widthFix"/><view>{{b}}</view></view></view><view class="dialog"><view class="content"><image src="https://louyu.zdocd.com/wxapp/static/image/error.webp" mode="widthFix"/><view>{{c}}</view></view></view>

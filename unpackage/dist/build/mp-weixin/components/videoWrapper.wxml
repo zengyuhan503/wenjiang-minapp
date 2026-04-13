@@ -1,0 +1,1 @@
+<view class="video-wrapper data-v-08529d7b"><video id="{{a}}" class="video data-v-08529d7b" poster="{{b}}" controls="{{true}}" show-center-play-btn="{{true}}" autoplay="{{false}}" muted="{{false}}" loop="{{false}}" enable-progress-gesture="{{true}}" src="{{c}}" binderror="{{d}}" bindplay="{{e}}"></video></view>

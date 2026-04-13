@@ -1,0 +1,79 @@
+{
+  "pages": [
+    "pages/home/index",
+    "pages/louyu/list",
+    "pages/supply/index",
+    "pages/policy/index"
+  ],
+  "subPackages": [
+    {
+      "root": "package",
+      "pages": [
+        "login/login",
+        "louyu/edit",
+        "louyu/index",
+        "consultation/index",
+        "lease/detail",
+        "lease/index",
+        "picture/index",
+        "news/detail",
+        "news/index",
+        "supply/detail",
+        "policy/ai",
+        "supply/message",
+        "supply/my",
+        "supply/my-detail",
+        "supply/publish",
+        "user/setting",
+        "user/password",
+        "company/index",
+        "company/coupon-desc",
+        "company/coupon-list"
+      ]
+    }
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "uni-app",
+    "navigationBarBackgroundColor": "#ffffff",
+    "backgroundColor": "#ffffff"
+  },
+  "tabBar": {
+    "color": "#747881",
+    "selectedColor": "#3071F2",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/home/index",
+        "text": "首页",
+        "iconPath": "static/tabbar/home.png",
+        "selectedIconPath": "static/tabbar/home_active.png"
+      },
+      {
+        "pagePath": "pages/louyu/list",
+        "text": "楼宇",
+        "iconPath": "static/tabbar/louyu.png",
+        "selectedIconPath": "static/tabbar/louyu_active.png"
+      },
+      {
+        "pagePath": "pages/supply/index",
+        "text": "供需",
+        "iconPath": "static/tabbar/supply.png",
+        "selectedIconPath": "static/tabbar/supply_active.png"
+      },
+      {
+        "pagePath": "pages/policy/index",
+        "text": "政策帮",
+        "iconPath": "static/tabbar/policy.png",
+        "selectedIconPath": "static/tabbar/policy_active.png"
+      }
+    ]
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "演示定位能力"
+    }
+  },
+  "usingComponents": {}
+}

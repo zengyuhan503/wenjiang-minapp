@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "企业信息",
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "custom-navbar": "../../components/customNavbar"
+  }
+}

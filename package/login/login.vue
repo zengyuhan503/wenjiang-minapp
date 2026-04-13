@@ -76,6 +76,7 @@ const onSubmit = () => {
   let params = {
     ...formState.value,
   };
+  console.log(params);
   if (Object.values(params).some((item) => item == "" || item == null)) {
     wx.showToast({
       icon: "none",

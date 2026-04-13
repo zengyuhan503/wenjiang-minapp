@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "留言",
+  "usingComponents": {
+    "success-modal": "../../components/successModal",
+    "submit-result-dialog": "../../components/SubmitResultDialog"
+  }
+}
