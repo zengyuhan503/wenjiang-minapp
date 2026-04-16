@@ -21,7 +21,7 @@
         <!-- 欢迎卡片 (固定显示在最顶部) -->
         <view class="chat-item welcome-item" id="msg-welcome">
           <view class="welcome-card">
-            <image class="robot-avatar" src="https://louyu.zdocd.com/wxapp/static/image/ai.png" mode="aspectFit"></image>
+            <image class="robot-avatar" src="https://louyu.zdocd.com/wxapp/static/image/aix2.png" mode="aspectFit"></image>
             <view class="welcome-title">Hi~</view>
             <view class="welcome-subtitle">我是温小楼Ai政策小助理~</view>
             <view class="welcome-desc">您可以输入对政策的疑问，我可以快速回答你或者给你推送相关政策文件哦~</view>
@@ -156,6 +156,10 @@ const stopGenerating = () => {
 };
 
 const getHistory = () => {
+  const isLogin = uni.getStorageSync("isLogin");
+  if (!isLogin) {
+    return; // 未登录时不请求历史记录
+  }
   uni.showLoading({ title: '加载中' });
   ai.history({ page: 1, page_size: 50 }).then(res => {
     if (res.code === 200 && res.data) {

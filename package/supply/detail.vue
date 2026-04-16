@@ -23,7 +23,7 @@
       </view>
 
       <!-- 模块2：抵扣券和地址 -->
-      <view class="block-section ticket-address-section">
+      <view class="block-section ticket-address-section" v-if="detail.tickets && detail.tickets.length > 0">
         <!-- 抵扣券 (横向滚动) -->
         <scroll-view scroll-x class="tickets-scroll" v-if="detail.tickets && detail.tickets.length > 0">
           <view class="ticket-list">
@@ -58,7 +58,8 @@
       </view>
 
       <!-- 模块3：底部文案补充 -->
-      <view class="block-section bottom-desc-section">
+      <view class="block-section bottom-desc-section" v-if="detail.coupon_desc">
+        <!-- 抵扣券说明 -->
         <view class="desc-content">
           <rich-text v-if="detail.coupon_desc" :nodes="formatRichText(detail.coupon_desc)"></rich-text>
           <text v-else>{{ detail.coupon_desc }}</text>

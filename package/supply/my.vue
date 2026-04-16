@@ -2,7 +2,7 @@
   <view class="page-container">
     <scroll-view scroll-y class="list-section" @scrolltolower="loadMore">
       <view class="list-container">
-        <view class="item-card" v-for="(item, index) in list" :key="index" @click="goToDetail(item)">
+        <view class="item-card" v-for="(item, index) in list" :key="index" @click="goToMyDetail(item)">
           <!-- 状态角标 -->
           <view class="status-badge" >
               <image v-if="item.audit_status  == 0" src="https://louyu.zdocd.com/wxapp/static/image/pending.png" class="status-icon" mode="aspectFit"></image>

@@ -35,7 +35,7 @@
       <view class="list-container">
         <view class="item" v-for="(item, index) in list" :key="index" @click="previewFile(item)">
           <view class="file-icon" :class="getFileTypeClass(item.name || item.title)">
-            <image src="https://louyu.zdocd.com/wxapp/static/image/excel_icon (3).png" mode="widthFix"></image>
+            <image src="https://louyu.zdocd.com/wxapp/static/image/excel_icon4.png" mode="widthFix"></image>
           </view>
           <view class="item-title">{{ item.name || item.title }}</view>
         </view>
@@ -394,6 +394,7 @@ onShow(() => {
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
+        line-clamp: 2;
         overflow: hidden;
       }
     }

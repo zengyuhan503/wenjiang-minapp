@@ -44,7 +44,7 @@
           type="password"
           placeholderStyle="font-size:15px"
           :clearable="false"
-          placeholder="请输入账号"
+          placeholder="请输入密码"
         >
         </uni-easyinput>
       </view>

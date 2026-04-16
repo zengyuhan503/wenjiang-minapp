@@ -7,7 +7,7 @@
           <image src="https://louyu.zdocd.com/wxapp/static/image/right.png" mode="widthFix" class="down-icon"
             :class="{ 'is-open': showDropdown }"></image>
         </view>
-        <view class="my-supply" @click="toMySupply" v-if="userInfo.type === 3">
+        <view class="my-supply" @click="toMySupply" >
           <text>我的供需</text>
           <view class="badge" v-if="myCount > 0">{{ myCount > 99 ? '99+' : myCount }}</view>
         </view>

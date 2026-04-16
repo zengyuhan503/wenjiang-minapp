@@ -4,13 +4,13 @@
 			<template #back>
 				<template v-if="isLogin">
 					<view class="back-icons">
-						<view class="back-icon-boxs" @click="goToOut">
+						<view class="back-icon-boxs" @click.stop="goToOut">
 							<image src="https://louyu.zdocd.com/wxapp/static/image/out.webp" mode="widthFix" />
 						</view>
-						<view class="back-icon-boxs" @click="toSetting">
+						<view class="back-icon-boxs" @click.stop="toSetting">
 							<image src="https://louyu.zdocd.com/wxapp/static/image/setting.png" mode="widthFix" />
 						</view>
-						<view class="back-icon-boxs" v-if="isLogin && userInfo?.type === 3" @click="toCompany">
+						<view class="back-icon-boxs" v-if="isLogin && userInfo?.type === 3" @click.stop="toCompany">
 							<image src="https://louyu.zdocd.com/wxapp/static/image/brand.png" mode="widthFix" />
 						</view>
 					</view>
@@ -18,6 +18,7 @@
 				<template v-else>
 					<view class="back-icons">
 						<image style="width: 32px; height: 32px"
+							@click.stop="toLogin"
 							src="https://louyu.zdocd.com/wxapp/static/image/user.png" mode="widthFix"
 							class="back-icon" />
 					</view>
@@ -203,15 +204,18 @@ const isToLogin = ref(false);
 const showCanvas = ref(true);
 const statusBarHeight = ref(20);
 const userInfo = ref({}); // 保存用户信息
+const toLogin = () => {
+	uni.navigateTo({
+		url: "/package/login/login",
+	});
+};
 const goToOut = () => {
 	console.log("退出登录");
 	showCanvas.value = false;
 	if (isLogin.value) {
 		customNavBarRef.value.showOutModel();
 	} else {
-		uni.reLaunch({
-			url: "/package/login/login",
-		});
+		
 	}
 };
 const homeStatistic = ref({
@@ -225,8 +229,11 @@ const homeStatistic = ref({
 const articleList = ref([]);
 const rentalList = ref([]);
 const changeOutModel = () => {
-	console.log("退出登录");
+	
 	showCanvas.value = true;
+	uni.reLaunch({
+		url: "/package/login/login",
+	});
 };
 const toLouyuList = () => {
 	console.log("跳转");
