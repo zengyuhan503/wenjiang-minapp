@@ -209,6 +209,10 @@ export const supply = {
     // 创建留言
     messageCreate: (params) => {
         return https.post('/supply-demand/message/create', params)
+    },
+    // 留言已读
+    messageRead: (id) => {
+        return https.put(`/supply-demand/message/read/${id}`)
     }
 }
 

@@ -46,7 +46,7 @@
             <view class="tag-row">
               <view class="type-tag" :class="item.type == 1 ? 'supply' : 'demand'">{{ item.type == 1 ? '供应' : '求购' }}
               </view>
-              <view class="date">{{ item.created_at }}</view>
+              <view class="date">{{ moment(item.created_at).format('YYYY-MM-DD') }}</view>
               <view class="company">{{ item.company_name }}</view>
             </view>
           </view>
@@ -67,6 +67,7 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import { onLoad, onShow } from "@dcloudio/uni-app";
+import moment from "moment";
 import CustomNavbar from "../../components/customNavbar.vue";
 import { supply, user } from "../../utlis/https";
 
@@ -100,6 +101,7 @@ const getIndustries = () => {
 };
 
 const getMyCount = () => {
+  if (!isLogin.value) return;
   supply.receivedCount().then(res => {
     if (res.code == 200) {
       myCount.value = typeof res.data === 'number' ? res.data : (res.data?.count || res.data?.total || res.data || 0);
@@ -277,13 +279,13 @@ onShow(() => {
         background: #FF6B3A;
         color: #fff;
         font-size: 12px;
-        padding: 1px 4px;
         border-radius: 10px;
-        height: 14px;
-        line-height: 14px;
         min-width: 16px;
-        text-align: center;
-        width: auto;
+        height: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
       }
     }
   }
@@ -412,6 +414,7 @@ onShow(() => {
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
+        line-clamp: 2;
         overflow: hidden;
       }
 

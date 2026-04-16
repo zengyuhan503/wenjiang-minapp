@@ -1,6 +1,6 @@
 <template>
   <view class="login-main">
-    <CustomNavbar   :onBack="goToOut"/>
+    <CustomNavbar   :onBack="goToOut" titleColor="#ffffff"/>
     <view style="position: relative">
       <image
         class="login-back"

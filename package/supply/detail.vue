@@ -23,19 +23,9 @@
       </view>
 
       <!-- 模块2：抵扣券和地址 -->
-      <view class="block-section ticket-address-section" v-if="detail.tickets && detail.tickets.length > 0">
-        <!-- 抵扣券 (横向滚动) -->
-        <scroll-view scroll-x class="tickets-scroll" v-if="detail.tickets && detail.tickets.length > 0">
-          <view class="ticket-list">
-            <view class="ticket-item" v-for="(ticket, index) in detail.tickets" :key="index">
-              <view class="ticket-icon">
-                <text>券</text>
-              </view>
-              <text class="ticket-name">{{ ticket.name }}</text>
-            </view>
-          </view>
-        </scroll-view>
-        <scroll-view scroll-x class="tickets-scroll" v-else>
+      <view class="block-section ticket-address-section" v-if="detail.coupon_list && detail.coupon_list.length > 0">
+        
+        <scroll-view scroll-x class="tickets-scroll" >
           <view class="ticket-list">
             <view class="ticket-item" v-for="(coupon, index) in detail.coupon_list" :key="index">
               <view class="ticket-icon">
@@ -111,7 +101,11 @@ const getDetail = (id) => {
 const previewImage = (current, urls) => {
   uni.previewImage({
     current,
-    urls
+    urls,
+    fail: (err) => {
+      console.log('预览图片失败', err);
+      uni.showToast({ title: '预览图片失败', icon: 'none' ,duration: 3500});
+    }
   });
 };
 
@@ -212,7 +206,7 @@ onLoad((options) => {
     border-radius: 6px 6px 6px 6px;
     border: 1px solid #FF9681;
     border-radius: 6px;
-    width: 148px;
+    min-width: 148px;
 
     .ticket-icon {
       width: 24px;

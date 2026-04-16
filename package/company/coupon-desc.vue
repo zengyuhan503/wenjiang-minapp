@@ -34,23 +34,23 @@ const getDesc = () => {
 
 const save = () => {
   if (!content.value.trim()) {
-    uni.showToast({ title: '说明内容不能为空', icon: 'none' });
+    uni.showToast({ title: '说明内容不能为空', icon: 'none' ,duration: 3500});
     return;
   }
   
   uni.showLoading({ title: '保存中...' });
   coupon.descSave({ content: content.value }).then(res => {
     if (res.code == 200 || res.code === 0 || !res.code) {
-      uni.showToast({ title: '修改成功', icon: 'success' });
+      uni.showToast({ title: '修改成功', icon: 'success' ,duration: 3500});
       setTimeout(() => {
         uni.navigateBack();
-      }, 1500);
+      }, 2500);
     } else {
-      uni.showToast({ title: res.message || '修改失败', icon: 'none' });
+      uni.showToast({ title: res.message || '修改失败', icon: 'none' ,duration: 3500});
     }
   }).catch(err => {
     console.log('保存失败', err);
-    uni.showToast({ title: err?.message || '修改失败', icon: 'none' });
+    uni.showToast({ title: err?.message || '修改失败', icon: 'none' ,duration: 3500});
   }).finally(() => {
     uni.hideLoading();
   });

@@ -1,7 +1,7 @@
 <template>
   <view class="page-container">
     <scroll-view scroll-y class="content-scroll" @scrolltolower="loadMoreMessages">
-      
+
       <!-- 模块1：标题、简介、图片 -->
       <view class="block-section header-section">
         <!-- 标题 -->
@@ -14,7 +14,8 @@
 
         <!-- 图片列表 (横向并排) -->
         <view class="image-list">
-          <image v-for="(img, imgIndex) in detail.images" :key="imgIndex" :src="img" mode="aspectFill" class="detail-image" @click="previewImage(img)"></image>
+          <image v-for="(img, imgIndex) in detail.images" :key="imgIndex" :src="img" mode="aspectFill"
+            class="detail-image" @click="previewImage(img, detail.images)"></image>
         </view>
       </view>
 
@@ -24,29 +25,24 @@
 
         <view class="message-list">
           <view class="message-item" v-for="(msg, index) in messages" :key="index">
-            
+
             <view class="msg-header">
               <text class="company-name">{{ msg.company_name }}</text>
-              <text class="msg-date">{{ msg.created_at_text }}</text>
+              <text class="msg-date">{{ moment(msg.created_at).format('YYYY-MM-DD') }}</text>
             </view>
-            
+
             <view class="msg-contact">
               <text class="contact-text">联系人：{{ msg.contact_name }}（{{ msg.contact_phone }}）</text>
               <!-- 电话icon占位，您可以后续替换该图片 -->
-              <image class="phone-icon" src="https://louyu.zdocd.com/wxapp/static/image/callphone-icon.png" mode="aspectFit" @click="makePhoneCall(msg.contact_phone)"></image>
+              <image class="phone-icon" src="https://louyu.zdocd.com/wxapp/static/image/callphone-icon.png"
+                mode="aspectFit" @click="makePhoneCall(msg.contact_phone)"></image>
             </view>
-            
+
             <view class="msg-content-wrapper" v-if="msg.content || (msg.images && msg.images.length > 0)">
               <view class="msg-text" v-if="msg.content">{{ msg.content }}</view>
               <view class="msg-images" v-if="msg.images && msg.images.length > 0">
-                <image 
-                  v-for="(img, imgIndex) in msg.images" 
-                  :key="imgIndex" 
-                  :src="img" 
-                  mode="aspectFill" 
-                  class="msg-image"
-                  @click="previewImage(img, msg.images)"
-                ></image>
+                <image v-for="(img, imgIndex) in msg.images" :key="imgIndex" :src="img" mode="aspectFill"
+                  class="msg-image" @click="previewImage(img, msg.images)"></image>
               </view>
             </view>
 
@@ -62,6 +58,7 @@
 import { ref } from "vue";
 import { onLoad } from "@dcloudio/uni-app";
 import { supply } from "../../utlis/https.js";
+import moment from "moment";
 
 const detail = ref({});
 const messages = ref([]);
@@ -78,10 +75,10 @@ const getDetail = (reset = false) => {
     messages.value = [];
     noMore.value = false;
   }
-  
+
   if (loading.value || noMore.value) return;
   loading.value = true;
-  
+
   uni.showLoading({ title: '加载中...' });
 
   supply.myDetail({ id: currentId, page: page.value, page_size: pageSize.value }).then(res => {
@@ -91,16 +88,24 @@ const getDetail = (reset = false) => {
       console.log(detail.value);
       // 留言列表处理
       let newData = res.data.messages?.list || [];
-      
+
       if (newData.length === 0 && page.value === 1) {
       } else {
         if (newData.length < pageSize.value) {
           noMore.value = true;
         }
         messages.value = [...messages.value, ...newData];
+        // 标记所有未读的留言为已读
+        newData.forEach(msg => {
+          if (msg.status === 0 || msg.status === undefined || msg.is_read === 0) { // 根据实际后端字段判断是否未读
+            supply.messageRead(msg.id).catch(err => {
+              console.log("标记留言已读失败", err);
+            });
+          }
+        });
       }
       page.value++;
-    } 
+    }
   }).catch(err => {
     console.log("获取我的供需详情失败", err);
   }).finally(() => {
@@ -137,7 +142,7 @@ onLoad((options) => {
   if (options.id) {
     currentId = options.id;
     getDetail(true);
-  } 
+  }
 });
 </script>
 
@@ -187,7 +192,7 @@ onLoad((options) => {
   flex-wrap: wrap;
   gap: 12px;
   margin-top: 16px;
-  
+
   .detail-image {
     width: 100px;
     height: 100px;
@@ -198,20 +203,26 @@ onLoad((options) => {
 
 /* 企业留言模块 */
 .messages-section {
-  padding: 10px;
+  padding: 0;
   padding-bottom: 30px;
+  
 }
 
 .section-title {
   font-size: 16px;
   font-weight: 600;
   color: #17181a;
-  padding-bottom: 16px;
   border-bottom: 1px solid #f0f2f5;
+  height: 48px;
+  display: flex;
+  justify-self: flex-start;
+  align-items: center;
+  padding-left: 12px;
 }
 
 .message-list {
   display: flex;
+  padding: 0 12px;
   flex-direction: column;
 }
 
@@ -256,7 +267,8 @@ onLoad((options) => {
       width: 20px;
       height: 20px;
       border-radius: 50%;
-      background-color: #f0f4ff; /* 占位背景色，避免没图时全白 */
+      background-color: #f0f4ff;
+      /* 占位背景色，避免没图时全白 */
       display: inline-block;
     }
   }
@@ -266,7 +278,7 @@ onLoad((options) => {
     border-radius: 8px;
     padding: 9px;
     margin-top: 8px;
-    
+
     .msg-text {
       font-size: 14px;
       color: #2E2F33;
@@ -279,7 +291,7 @@ onLoad((options) => {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      
+
       .msg-image {
         width: 80px;
         height: 80px;
@@ -288,9 +300,9 @@ onLoad((options) => {
       }
     }
   }
-  
-    view:last-child {
-      margin-bottom: 0;
-    }
+
+  view:last-child {
+    margin-bottom: 0;
+  }
 }
 </style>

@@ -17,7 +17,7 @@
               <text class="type-tag" :class="item.type == 1 ? 'supply' : 'demand'">
                 {{ item.type == 1 ? '供应' : '求购' }}
               </text>
-              <text class="date">{{ item.created_at || item.date }}</text>
+              <text class="date">{{ moment(item.created_at).format('YYYY-MM-DD') }}</text>
             </view>
             
           <view class="action-group">
@@ -29,8 +29,8 @@
           <!-- 留言数量提示 -->
           <view>
             <view class="message-count" v-if="item.message_company_count > 0 && item.audit_status == 1" @click.stop="goToMyDetail(item)">
-              已有{{ item.message_company_count }}家企业留言
-              <view class="count-badge">{{ item.unread_message_count > 99 ? '99+' : item.unread_message_count }}</view>
+              已有{{ item.message_company_count }}条留言
+              <view class="count-badge" v-if="item.unread_message_count > 0">{{ item.unread_message_count > 99 ? '99+' : item.unread_message_count }}</view>
             </view>
           </view>
 
@@ -71,6 +71,7 @@ import { ref } from "vue";
 import { onLoad, onShow } from "@dcloudio/uni-app";
 import { supply } from "../../utlis/https.js";
 import CustomNavbar from "../../components/customNavbar.vue";
+import moment from "moment";
 
 const list = ref([]);
 const page = ref(1);
@@ -134,14 +135,14 @@ const confirmDelete = () => {
     // 调用删除接口并刷新列表
     supply.delete(itemToDelete.value.id).then(res => {
       if (res.code == 200 || res.code === 0 || !res.code) {
-        uni.showToast({ title: '删除成功', icon: 'none' });
+        uni.showToast({ title: '删除成功', icon: 'none' ,duration: 3500});
         getList(true); // 成功后重新加载第一页数据
       } else {
-        uni.showToast({ title: res.message || res.msg || '删除失败' , icon: 'none' });
+        uni.showToast({ title: res.message || res.msg || '删除失败' , icon: 'none' ,duration: 3500});
       }
     }).catch(err => {
       console.log("删除供需失败", err);
-      uni.showToast({ title: err?.message || err?.msg || '删除失败' , icon: 'none' });
+      uni.showToast({ title: err?.message || err?.msg || '删除失败' , icon: 'none' ,duration: 3500});
     }).finally(() => {
       showDeleteModal.value = false;
       itemToDelete.value = null;
@@ -216,6 +217,7 @@ onShow(() => {
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
+        line-clamp: 2;
         overflow: hidden;
       }
 

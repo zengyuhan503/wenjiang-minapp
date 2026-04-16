@@ -286,13 +286,13 @@ const sendMessage = () => {
       typeMessage(res.data.answer || '', activeMsg);
       
     } else {
-      uni.showToast({ title: res.message || '获取回答失败', icon: 'none' });
+      uni.showToast({ title: res.message || '获取回答失败', icon: 'none' ,duration: 3500});
       activeMsg.content = '获取回答失败';
       isGenerating.value = false;
     }
   }).catch(err => {
     if (isGenerating.value) {
-      uni.showToast({ title: '网络请求失败', icon: 'none' });
+      uni.showToast({ title: '网络请求失败', icon: 'none' ,duration: 3500});
       const activeMsg = messageList.value[activeMsgIndex];
       activeMsg.isLoading = false;
       activeMsg.content = '网络请求失败';
@@ -338,7 +338,7 @@ const openFile = (file) => {
           },
           fail: (err) => {
             console.log('打开文档失败', err);
-            uni.showToast({ title: '打开文档失败', icon: 'none' });
+            uni.showToast({ title: '打开文档失败', icon: 'none' ,duration: 3500});
           },
           complete: () => {
             uni.hideLoading();
@@ -346,13 +346,13 @@ const openFile = (file) => {
         });
       } else {
         uni.hideLoading();
-        uni.showToast({ title: '文件下载失败', icon: 'none' });
+        uni.showToast({ title: '文件下载失败', icon: 'none' ,duration: 3500});
       }
     },
     fail: (err) => {
       console.log('下载失败', err);
       uni.hideLoading();
-      uni.showToast({ title: '文件下载失败', icon: 'none' });
+      uni.showToast({ title: '文件下载失败', icon: 'none' ,duration: 3500});
     }
   });
 };

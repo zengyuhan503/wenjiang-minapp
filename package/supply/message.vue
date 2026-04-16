@@ -105,7 +105,7 @@ const chooseImage = () => {
           }
         }
       } catch (error) {
-        uni.showToast({ title: '图片上传失败', icon: 'none' });
+        uni.showToast({ title: '图片上传失败', icon: 'none' ,duration: 3500});
       } finally {
         uni.hideLoading();
       }

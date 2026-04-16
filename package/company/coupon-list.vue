@@ -112,19 +112,16 @@ const submitAdd = () => {
     quantity: Number(addForm.value.quantity) 
   }).then(res => {
     if (res.code === 200) {
-      uni.showToast({ title: '新增成功', icon: 'success' });
+      uni.showToast({ title: '新增成功', icon: 'success' ,duration: 3500});
       showAdd.value = false;
       addForm.value = { name: "", quantity: "" };
       getList();
     } else {
-      uni.showToast({ title: res.message || '新增失败', icon: 'none' });
+      uni.showToast({ title: res.message || '新增失败', icon: 'none' ,duration: 3500});
     }
   }).catch(err => {
     console.log('新增抵扣券失败', err);
-    uni.showToast({ title: '新增成功', icon: 'success' });
-    showAdd.value = false;
-    addForm.value = { name: "", quantity: "" };
-    getList();
+    uni.showToast({ title: '新增失败', icon: 'none' ,duration: 3500});
   }).finally(() => {
     uni.hideLoading();
   });
@@ -145,14 +142,14 @@ const executeDelete = () => {
     uni.showLoading({ title: '删除中...' });
     coupon.delete(itemToDelete.value.id).then(res => {
       if (res.code === 200) {
-        uni.showToast({ title: '删除成功', icon: 'success' });
+        uni.showToast({ title: '删除成功', icon: 'success' ,duration: 3500});
         getList();
       } else {
-        uni.showToast({ title: res.message || '删除失败', icon: 'none' });
+        uni.showToast({ title: res.message || '删除失败', icon: 'none' ,duration: 3500});
       }
     }).catch(err => {
       console.log('删除抵扣券失败', err);
-      uni.showToast({ title: '删除成功', icon: 'success' });
+      uni.showToast({ title: '删除失败', icon: 'none' ,duration: 3500});
       getList();
     }).finally(() => {
       uni.hideLoading();

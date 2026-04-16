@@ -59,7 +59,7 @@ onShow(() => {
 
 .header-bg {
   width: 100%;
-  height: 210px;
+  height: 208px;
   display: flex;
   flex-direction: column;
   justify-content: center;

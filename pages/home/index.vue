@@ -229,11 +229,10 @@ const homeStatistic = ref({
 const articleList = ref([]);
 const rentalList = ref([]);
 const changeOutModel = () => {
-	
+	isLogin.value = false;
+	uni.setStorageSync("isLogin", false);
+		
 	showCanvas.value = true;
-	uni.reLaunch({
-		url: "/package/login/login",
-	});
 };
 const toLouyuList = () => {
 	console.log("跳转");
