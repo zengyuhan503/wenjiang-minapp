@@ -70,7 +70,6 @@
 import { ref } from "vue";
 import { onLoad } from "@dcloudio/uni-app";
 import { supply } from "../../utlis/https";
-import CustomNavbar from "../../components/customNavbar.vue";
 
 const detail = ref({});
 let currentId = null;
