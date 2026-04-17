@@ -9,7 +9,8 @@
     <view class="header-section">
       <view class="industry-picker" @click="toggleDropdown">
         <text>{{ currentIndustryName }}</text>
-        <image src="https://louyu.zdocd.com/wxapp/static/image/right.png" mode="widthFix" class="down-icon" :class="{ 'is-open': showDropdown }"></image>
+        <image src="https://louyu.zdocd.com/wxapp/static/image/right.png" mode="widthFix" class="down-icon"
+          :class="{ 'is-open': showDropdown }"></image>
       </view>
     </view>
 
@@ -18,13 +19,8 @@
       <view class="dropdown-mask" @click="closeDropdown"></view>
       <view class="dropdown-content">
         <scroll-view scroll-y class="dropdown-scroll">
-          <view 
-            class="dropdown-item" 
-            v-for="(item, index) in industries" 
-            :key="index"
-            :class="{ active: industryIndex === index }"
-            @click="selectIndustry(index)"
-          >
+          <view class="dropdown-item" v-for="(item, index) in industries" :key="index"
+            :class="{ active: industryIndex === index }" @click="selectIndustry(index)">
             {{ item.company_name }}
           </view>
         </scroll-view>
@@ -91,22 +87,22 @@ const getList = (reset = false) => {
   if (loading.value || noMore.value) return;
 
   loading.value = true;
-  
+
   let params = {
     page: page.value,
     page_size: pageSize.value,
   };
-  
+
   const selectedIndustry = industries.value[industryIndex.value];
   if (selectedIndustry && selectedIndustry.company_name !== '') {
-    params.industry = selectedIndustry.company_name||"";
+    params.industry = selectedIndustry.company_name || "";
   }
-  if(params.industry=='全部行业') delete params.industry;
+  if (params.industry == '全部行业') delete params.industry;
   console.log(params)
   policy.list(params).then(res => {
     if (res.code == 200 && res.data) {
       let newData = res.data.list || [];
-      
+
 
       if (newData.length < pageSize.value) {
         noMore.value = true;
@@ -162,16 +158,16 @@ const getFileTypeClass = (filename) => {
   switch (ext) {
     case 'pdf': return 'type-pdf';
     case 'txt': return 'type-txt';
-    case 'doc': 
+    case 'doc':
     case 'docx': return 'type-doc';
-    case 'ppt': 
+    case 'ppt':
     case 'pptx': return 'type-ppt';
-    case 'jpg': 
-    case 'jpeg': 
+    case 'jpg':
+    case 'jpeg':
     case 'png': return 'type-img';
-    case 'mp4': 
+    case 'mp4':
     case 'avi': return 'type-video';
-    case 'xls': 
+    case 'xls':
     case 'xlsx': return 'type-excel';
     default: return 'type-unknown';
   }
@@ -184,9 +180,9 @@ const previewFile = (item) => {
     uni.showToast({ title: '文件地址不存在', icon: 'none' });
     return;
   }
-  
+
   uni.showLoading({ title: '正在打开文件...' });
-  
+
   uni.downloadFile({
     url: url,
     success: (res) => {
@@ -247,12 +243,13 @@ onShow(() => {
   height: 220px;
   background: url("https://louyu.zdocd.com/wxapp/static/image/policy_back.png");
   z-index: 0;
-  image{
+
+  image {
     width: 100%;
-    height:200px;
+    height: 200px;
     object-fit: cover;
   }
-  
+
   &::after {
     content: '';
     position: absolute;
@@ -272,7 +269,7 @@ onShow(() => {
   display: flex;
   justify-content: center;
   margin-top: 100px;
-  
+
   .industry-picker {
     display: flex;
     align-items: center;
@@ -280,14 +277,14 @@ onShow(() => {
     font-size: 15px;
     color: #ffffff;
     font-weight: 500;
-    
+
     .down-icon {
       width: 12px;
       margin-left: 6px;
       transform: rotate(90deg);
       transition: transform 0.3s;
       filter: brightness(0) invert(1);
-      
+
       &.is-open {
         transform: rotate(-90deg);
       }
@@ -297,7 +294,8 @@ onShow(() => {
 
 .dropdown-wrapper {
   position: absolute;
-  top: 148px; /* 导航栏和筛选栏的高度大致位置，根据实际情况微调 */
+  top: 148px;
+  /* 导航栏和筛选栏的高度大致位置，根据实际情况微调 */
   left: 0;
   width: 100%;
   height: calc(100vh - 90px);
@@ -320,21 +318,21 @@ onShow(() => {
     width: 100%;
     z-index: 100;
     border-radius: 0 0 12px 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
     .dropdown-scroll {
       max-height: 60vh;
-      
+
       .dropdown-item {
         padding: 16px 20px;
         font-size: 15px;
         color: #17181a;
         border-bottom: 1px solid #f0f2f5;
-        
+
         &:last-child {
           border-bottom: none;
         }
-        
+
         &.active {
           color: #3071f2;
           font-weight: 500;
@@ -346,7 +344,7 @@ onShow(() => {
 
 .list-section {
   flex: 1;
-  padding: 0 ;
+  padding: 0;
   box-sizing: border-box;
   position: relative;
   z-index: 1;
@@ -357,7 +355,7 @@ onShow(() => {
     border-radius: 12px;
     padding: 0px 16px;
     min-height: 100%;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
 
     .item {
       display: flex;
@@ -378,12 +376,12 @@ onShow(() => {
         justify-content: center;
         margin-right: 12px;
         flex-shrink: 0;
-        
+
         image {
           width: 32px;
           height: 32px;
         }
-        
+
       }
 
       .item-title {
@@ -400,7 +398,9 @@ onShow(() => {
     }
   }
 
-  .loading-status, .no-more, .empty-state {
+  .loading-status,
+  .no-more,
+  .empty-state {
     text-align: center;
     font-size: 13px;
     color: #a1a7b2;
@@ -411,11 +411,12 @@ onShow(() => {
 .fab-btn {
   position: absolute;
   right: 8px;
-  bottom: 60px; /* 预留给 tabBar 的空间 */
+  bottom: 60px;
+  /* 预留给 tabBar 的空间 */
   width: 56px;
   height: 66px;
   background: #4B87FF;
-  box-shadow: 0px 2px 8px 0px rgba(23,45,156,0.2);
+  box-shadow: 0px 2px 8px 0px rgba(23, 45, 156, 0.2);
   border-radius: 10px 10px 10px 10px;
   display: flex;
   flex-direction: column;
@@ -423,13 +424,13 @@ onShow(() => {
   justify-content: center;
   box-shadow: 0 4px 12px rgba(48, 113, 242, 0.3);
   z-index: 10;
-  
+
   image {
     width: 40px;
     height: 40px;
     margin-bottom: 2px;
   }
-  
+
   text {
     font-size: 10px;
     color: #ffffff;
