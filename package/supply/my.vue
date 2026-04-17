@@ -29,7 +29,7 @@
           <!-- 留言数量提示 -->
           <view>
             <view class="message-count" v-if="item.message_company_count > 0 && item.audit_status == 1" @click.stop="goToMyDetail(item)">
-              已有{{ item.message_company_count }}条留言
+              已有{{ item.message_company_count }}家企业留言
               <view class="count-badge" v-if="item.unread_message_count > 0">{{ item.unread_message_count > 99 ? '99+' : item.unread_message_count }}</view>
             </view>
           </view>

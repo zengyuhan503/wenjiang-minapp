@@ -4,7 +4,7 @@
     <view class="blue-bg">
       <image src="https://louyu.zdocd.com/wxapp/static/image/policy_back.png" mode="widthFix"></image>
     </view>
-    <CustomNavbar title="政策帮" titleColor="#ffffff" bgColor="transparent" />
+    <CustomNavbar title="政策帮" titleColor="#ffffff" bgColor="transparent" :isShowBack="false" />
 
     <view class="header-section">
       <view class="industry-picker" @click="toggleDropdown">
@@ -192,14 +192,13 @@ const previewFile = (item) => {
           filePath: filePath,
           showMenu: true, // 是否显示右上角菜单，允许用户分享或保存
           success: () => {
+            uni.hideLoading();
             console.log('打开文档成功');
           },
           fail: (err) => {
+            uni.hideLoading();
             console.log('打开文档失败', err);
             uni.showToast({ title: '打开文档失败', icon: 'none' });
-          },
-          complete: () => {
-            uni.hideLoading();
           }
         });
       } else {

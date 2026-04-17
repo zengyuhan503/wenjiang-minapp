@@ -187,6 +187,16 @@ const toDetail = (id) => {
 };
 
 const toMySupply = () => {
+  let userInfo = uni.getStorageSync("userInfo");
+  userInfo = userInfo?JSON.parse(userInfo):null;
+  console.log(userInfo);
+  if(userInfo && userInfo.type!==3){
+    uni.showToast({
+      title: '走访人员无法访问',
+      icon: 'none'
+    });
+    return;
+  }
   uni.navigateTo({
     url: '/package/supply/my'
   });
@@ -280,9 +290,9 @@ onShow(() => {
         color: #fff;
         font-size: 12px;
         border-radius: 10px;
-        min-width: 16px;
+        width: 16px;
         height: 16px;
-        display: flex;
+        display: inline-flex;
         align-items: center;
         justify-content: center;
         

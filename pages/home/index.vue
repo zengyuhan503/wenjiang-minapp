@@ -210,7 +210,6 @@ const toLogin = () => {
 	});
 };
 const goToOut = () => {
-	console.log("退出登录");
 	showCanvas.value = false;
 	if (isLogin.value) {
 		customNavBarRef.value.showOutModel();
@@ -228,10 +227,14 @@ const homeStatistic = ref({
 });
 const articleList = ref([]);
 const rentalList = ref([]);
-const changeOutModel = () => {
+const changeOutModel = (val) => {
+	if (!val) {
+		return;
+	}
 	isLogin.value = false;
+	userInfo.value = {};
+	uni.removeStorageSync("userInfo");
 	uni.setStorageSync("isLogin", false);
-		
 	showCanvas.value = true;
 };
 const toLouyuList = () => {
@@ -329,6 +332,7 @@ const getUserData = () => {
 		user.getInfo().then(res => {
 			if (res.code === 200 && res.data) {
 				userInfo.value = res.data;
+				uni.setStorageSync("userInfo", JSON.stringify(res.data));
 			}
 		}).catch(err => {
 			// 如果由于 token 过期或未登录等原因报错，静默处理或重置

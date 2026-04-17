@@ -12,7 +12,7 @@
           <rich-text v-if="detail.content" :nodes="formatRichText(detail.content)"></rich-text>
           <text v-else>{{ detail.desc ||
             '当前市场供需关系呈现结构性分化特征，整体供需格局趋于动态调整。部分领域供给相对充足，竞争较为充分，但有效供给与高品质需求仍存在一定差距。随着消费需求持续升级，市场对产品质量、服务体验和个性化供给提出更高要求。'
-            }}</text>
+          }}</text>
         </view>
 
         <!-- 图片列表 (横向并排) -->
@@ -24,8 +24,8 @@
 
       <!-- 模块2：抵扣券和地址 -->
       <view class="block-section ticket-address-section" v-if="detail.coupon_list && detail.coupon_list.length > 0">
-        
-        <scroll-view scroll-x class="tickets-scroll" >
+
+        <scroll-view scroll-x class="tickets-scroll">
           <view class="ticket-list">
             <view class="ticket-item" v-for="(coupon, index) in detail.coupon_list" :key="index">
               <view class="ticket-icon">
@@ -48,7 +48,8 @@
       </view>
 
       <!-- 模块3：底部文案补充 -->
-      <view class="block-section bottom-desc-section" v-if="detail.coupon_desc">
+      <view class="block-section bottom-desc-section"
+        v-if="detail.coupon_list && detail.coupon_list.length > 0 && detail.coupon_desc">
         <!-- 抵扣券说明 -->
         <view class="desc-content">
           <rich-text v-if="detail.coupon_desc" :nodes="formatRichText(detail.coupon_desc)"></rich-text>
@@ -86,7 +87,6 @@ const formatRichText = (html) => {
 };
 
 const getDetail = (id) => {
-  uni.showLoading({ title: '加载中...' });
   supply.detail(id).then(res => {
     if (res.code == 200 && res.data) {
       detail.value = res.data;
@@ -104,12 +104,37 @@ const previewImage = (current, urls) => {
     urls,
     fail: (err) => {
       console.log('预览图片失败', err);
-      uni.showToast({ title: '预览图片失败', icon: 'none' ,duration: 3500});
+      uni.showToast({ title: '预览图片失败', icon: 'none', duration: 3500 });
     }
   });
 };
 
 const toMessage = () => {
+  let userInfo = uni.getStorageSync("userInfo");
+  userInfo = userInfo ? JSON.parse(userInfo) : null;
+  let islogin = uni.getStorageSync("isLogin") || false;
+  if (!islogin) {
+    uni.showToast({
+      title: '请先登录',
+      icon: 'none',
+      duration: 2000
+    });
+    setTimeout(() => {
+      uni.redirectTo({
+        url: "/package/login/login",
+      });
+    }, 2000);
+    return;
+  }
+
+  if (islogin && userInfo.type !== 3) {
+    uni.showToast({
+      title: '走访人员无法留言',
+      icon: 'none',
+      duration: 2000
+    });
+    return;
+  }
   uni.navigateTo({
     url: `/package/supply/message?id=${currentId}`
   });
@@ -206,7 +231,6 @@ onLoad((options) => {
     border-radius: 6px 6px 6px 6px;
     border: 1px solid #FF9681;
     border-radius: 6px;
-    min-width: 148px;
 
     .ticket-icon {
       width: 24px;

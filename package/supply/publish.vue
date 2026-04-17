@@ -209,30 +209,30 @@ const onSubmit = () => {
   if (currentId) {
     // 更新
     supply.update(currentId, formData.value).then(res => {
+      uni.hideLoading();
       if (res.code == 200 || res.code === 0 || !res.code) {
         showSuccessDialog.value = true;
       } else {
         uni.showToast({ title: res.message || '更新失败', icon: 'none' });
       }
     }).catch(err => {
+      uni.hideLoading();
       console.log("更新供需失败", err);
       uni.showToast({ title: '更新失败', icon: 'none' });
-    }).finally(() => {
-      uni.hideLoading();
     });
   } else {
     // 新增
     supply.create(formData.value).then(res => {
+      uni.hideLoading();
       if (res.code == 200 || res.code === 0 || !res.code) {
         showSuccessDialog.value = true;
       } else {
         uni.showToast({ title: res.message || '发布失败', icon: 'none' });
       }
     }).catch(err => {
+      uni.hideLoading();
       console.log("发布供需失败", err);
       uni.showToast({ title: '发布失败', icon: 'none' });
-    }).finally(() => {
-      uni.hideLoading();
     });
   }
 };

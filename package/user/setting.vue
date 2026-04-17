@@ -31,7 +31,7 @@ const maskedPhone = computed(() => {
 const getUserInfo = () => {
   user.getInfo().then(res => {
     if (res.code === 200 && res.data) {
-      phone.value = res.data.phone || "";
+      phone.value = res.data.phone || res.data.username;
     }
   }).catch(err => {
     console.log("获取用户信息失败", err);
@@ -57,6 +57,7 @@ onShow(() => {
 
 .list-group {
   background-color: #ffffff;
+  border-top: 1px solid #E1E5EA;
 }
 
 .list-item {

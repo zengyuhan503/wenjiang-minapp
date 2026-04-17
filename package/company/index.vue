@@ -4,8 +4,10 @@
     <view class="header-bg">
       <view class="company-info">
         <image class="back" src="https://louyu.zdocd.com/wxapp/static/image/company-back.png" mode="widthFix"></image>
-        <image src="https://louyu.zdocd.com/wxapp/static/image/company-house.png" class="house-icon" mode="aspectFit"></image>
-        <view class="company-name">{{ companyName }}</view>
+        <view class="company-content">
+          <image src="https://louyu.zdocd.com/wxapp/static/image/company-house.png" class="house-icon" mode="aspectFit"></image>
+          <view class="company-name">{{ companyName }}</view>
+        </view>
       </view>
     </view>
     
@@ -70,17 +72,24 @@ onShow(() => {
 }
 
 .company-info {
-text-align: center;
-  margin-top: 20px;
   text-align: center;
-  padding-top: 58px;
+  position: relative;
    .back{
+    width: 100%;
+    z-index: 1;
+  }
+  .company-content{
+    padding-top: 58px;
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 200px;
-    z-index: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
   }
   .house-icon {
     width: 48px;
@@ -111,6 +120,7 @@ text-align: center;
   padding: 0px 16px;
   border-bottom: 1px solid #f0f2f5;
   height: 56px;
+  
 
 
   .label {

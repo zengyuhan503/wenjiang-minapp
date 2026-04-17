@@ -22,7 +22,6 @@ import { coupon } from "../../utlis/https.js";
 const content = ref("");
 
 const getDesc = () => {
-  uni.showLoading({ title: '加载中...' });
   coupon.desc().then(res => {
     if (res.code === 200 && res.data) {
       content.value = res.data.content || "";
@@ -40,6 +39,7 @@ const save = () => {
   
   uni.showLoading({ title: '保存中...' });
   coupon.descSave({ content: content.value }).then(res => {
+    uni.hideLoading();
     if (res.code == 200 || res.code === 0 || !res.code) {
       uni.showToast({ title: '修改成功', icon: 'success' ,duration: 3500});
       setTimeout(() => {
@@ -49,10 +49,9 @@ const save = () => {
       uni.showToast({ title: res.message || '修改失败', icon: 'none' ,duration: 3500});
     }
   }).catch(err => {
+    uni.hideLoading();
     console.log('保存失败', err);
     uni.showToast({ title: err?.message || '修改失败', icon: 'none' ,duration: 3500});
-  }).finally(() => {
-    uni.hideLoading();
   });
 };
 

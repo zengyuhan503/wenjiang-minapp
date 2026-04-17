@@ -5,7 +5,7 @@
   >
     <view class="nav-content">
       <!-- 返回按钮区域 -->
-      <view class="back-btn" @click="handleBack">
+      <view v-if="isShowBack" class="back-btn" @click="handleBack">
         <slot name="back">
           <uni-icons type="left" size="20" :color="titleColor"></uni-icons>
         </slot>
@@ -43,6 +43,7 @@ const props = defineProps({
   titleColor: { type: String, default: "#000" },
   bgColor: { type: String, default: "transparent" },
   onBack: Function, // 自定义返回行为
+  isShowBack: { type: Boolean, default: true },
 });
 
 let emit = defineEmits(["changeOutModel"]);
@@ -78,7 +79,7 @@ const onOut = () => {
   uni.removeStorageSync("refresh_token");
   openOutModel.value = false;
   wx.redirectTo({ url: "/pages/home/index" });
-  emit("changeOutModel", false);
+  emit("changeOutModel", true);
 };
 const onClean = () => {
   openOutModel.value = false;

@@ -47,7 +47,7 @@
               <view class="file-list">
                 <view class="file-item" v-for="(file, fIndex) in msg.policy_file_list" :key="fIndex" @click="openFile(file)">
                   <view class="file-icon" :class="getFileTypeClass(file.name || file.title)">
-                    <image src="https://louyu.zdocd.com/wxapp/static/image/excel_icon (3).png" mode="widthFix"></image>
+                    <image src="https://louyu.zdocd.com/wxapp/static/image/excel_icon4.png" mode="widthFix"></image>
                   </view>
                   <view class="file-name">{{ file.name || file.title }}</view>
                 </view>
@@ -334,14 +334,13 @@ const openFile = (file) => {
           filePath: filePath,
           showMenu: true,
           success: () => {
+            uni.hideLoading();
             console.log('打开文档成功');
           },
           fail: (err) => {
+            uni.hideLoading();
             console.log('打开文档失败', err);
             uni.showToast({ title: '打开文档失败', icon: 'none' ,duration: 3500});
-          },
-          complete: () => {
-            uni.hideLoading();
           }
         });
       } else {
@@ -427,9 +426,11 @@ onLoad(() => {
   flex: 1;
   position: relative;
   z-index: 10;
+  padding-top: 20px;
   margin-top: 80px; /* 避开导航栏 */
-  height: calc(100vh - 80px - 140px); /* 导航栏高度 - 底部输入框预估高度 - 底部安全区 */
+  height: calc(100vh - 80px - 140px - 20px); /* 导航栏高度 - 底部输入框预估高度 - 底部安全区 */
   box-sizing: border-box;
+
 }
 
 /* 隐藏 scroll-view 滚动条 (针对各种平台) */
@@ -443,6 +444,7 @@ onLoad(() => {
 
 .chat-content {
   padding: 16px 16px 20px; /* 底部不再需要留超大空白，给个基础 padding 即可 */
+  padding-top: 0;
 }
 
 /* 欢迎卡片 */
