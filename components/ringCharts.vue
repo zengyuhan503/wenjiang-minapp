@@ -112,9 +112,14 @@ const option = {
 
 // 组件挂载后初始化echarts实例 (也可在请求数据后初始化)
 function initEchart() {
-  echartRef.value.init(option);
+  setTimeout(() => {
+    if (echartRef.value) {
+      echartRef.value.init(option);
+    }
+  }, 100);
 }
 function setOption() {
+  if (!echartRef.value) return;
   let series1 = option.series[0];
   series1.data[1].value = props.occupancy_rate;
   series1.data[0].value = 100 - props.occupancy_rate;

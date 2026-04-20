@@ -276,6 +276,7 @@ onShow(() => {
     font-size: 15px;
     color: #ffffff;
     font-weight: 500;
+    padding-left: 18px;
 
     .down-icon {
       width: 12px;

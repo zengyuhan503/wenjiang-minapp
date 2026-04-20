@@ -171,8 +171,10 @@ export default {
       this._resizeTimer && clearTimeout(this._resizeTimer);
       this._resizeTimer = setTimeout(() => {
         this.getCanvasQuery().boundingClientRect().exec(res => {
-          const { width, height } = res[0];
-          this.echartObj.resize({width, height}) // 必须设置width, height否则旧版canvas重绘失败
+          if (res && res[0]) {
+            const { width, height } = res[0];
+            this.echartObj && this.echartObj.resize({width, height}) // 必须设置width, height否则旧版canvas重绘失败
+          }
         });
       }, 30)
     },
@@ -189,29 +191,41 @@ export default {
     // 获取Canvas上下文
     getAppCanvas() {
       return new Promise((resolve) => {
-        this.getCanvasQuery().fields({ node: true, size: true }).exec((res) => {
-          const { width, height, node } = res[0];
+        let retryCount = 0;
+        const query = () => {
+          this.getCanvasQuery().fields({ node: true, size: true }).exec((res) => {
+            if (!res || !res[0]) {
+              retryCount++;
+              if (retryCount < 20) {
+                setTimeout(query, 50);
+                return;
+              }
+            }
+            const res0 = (res && res[0]) || {};
+            const { width, height, node } = res0;
 
-          let devicePixelRatio = 1; // 旧版canvas不支持dpr (新版2d支持, 使图表更清晰)
+            let devicePixelRatio = 1; // 旧版canvas不支持dpr (新版2d支持, 使图表更清晰)
 
-          if (node && node.getContext) {
-            const ctxV2 = node.getContext('2d'); // 新版canvas (type="2d")
+            if (node && node.getContext) {
+              const ctxV2 = node.getContext('2d'); // 新版canvas (type="2d")
 
-            // #ifndef MP-JD
-            devicePixelRatio = getWindowInfo().pixelRatio; // 京东小程序仍使用1, 否则会被放大
-            // #endif
+              // #ifndef MP-JD
+              devicePixelRatio = getWindowInfo().pixelRatio; // 京东小程序仍使用1, 否则会被放大
+              // #endif
 
-            resolve({ ctx: ctxV2, width, height, node, devicePixelRatio });
-          } else {
-            const ctxV1 = uni.createCanvasContext(this.canvasId, this); // 旧版canvas (type="webgl")
-            
-            // #ifdef MP-LARK
-            devicePixelRatio = getWindowInfo().pixelRatio; // 飞书小程序需使用真实dpr, 否则会被缩小
-            // #endif
+              resolve({ ctx: ctxV2, width, height, node, devicePixelRatio });
+            } else {
+              const ctxV1 = uni.createCanvasContext(this.canvasId, this); // 旧版canvas (type="webgl")
+              
+              // #ifdef MP-LARK
+              devicePixelRatio = getWindowInfo().pixelRatio; // 飞书小程序需使用真实dpr, 否则会被缩小
+              // #endif
 
-            resolve({ ctx: ctxV1, width, height, devicePixelRatio });
-          }
-        });
+              resolve({ ctx: ctxV1, width, height, devicePixelRatio });
+            }
+          });
+        };
+        query();
       });
     },
 

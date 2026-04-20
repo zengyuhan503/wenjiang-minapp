@@ -100,7 +100,7 @@
 					<div class="charts-box">
 						<RingCharts :wj_occupancy_rate="homeStatistic.wj_occupancy_rate"
 							:occupancy_rate="homeStatistic.occupancy_rate" :company_num="homeStatistic.company_num"
-							v-show="showCanvas" />
+							v-if="showCanvas" />
 					</div>
 					<div class="charts-data">
 						<div class="items">
@@ -188,7 +188,9 @@ import {
 import CustomNavbar from "@/components/customNavbar.vue";
 import RingCharts from "@/components/ringCharts.vue";
 import {
-	onShow
+	onShow,
+	onHide,
+	onUnload 
 } from "@dcloudio/uni-app";
 import {
 	statistic,
@@ -229,6 +231,7 @@ const articleList = ref([]);
 const rentalList = ref([]);
 const changeOutModel = (val) => {
 	if (!val) {
+		showCanvas.value = true;
 		return;
 	}
 	isLogin.value = false;
@@ -345,6 +348,7 @@ const getUserData = () => {
 };
 
 onShow(async () => {
+	showCanvas.value = true;
 	getHomeStatistic();
 	getArticleList();
 	getRentalList();
@@ -357,6 +361,13 @@ onShow(async () => {
 	statusBarHeight.value = sys.statusBarHeight;
 	statusBarHeight.value = sys.statusBarHeight + 44 + 14;
 
+});
+onUnload(() => {
+	showCanvas.value = false;
+});
+onHide(() => {
+	showCanvas.value = false;
+	console.log("onHide");
 });
 </script>
 
