@@ -66,7 +66,7 @@
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
-import { onLoad, onShow } from "@dcloudio/uni-app";
+import { onLoad, onShow, onUnload } from "@dcloudio/uni-app";
 import moment from "moment";
 import CustomNavbar from "../../components/customNavbar.vue";
 import { supply, user } from "../../utlis/https";
@@ -84,6 +84,8 @@ const noMore = ref(false);
 const myCount = ref(0);
 const userInfo = ref({}); // 保存用户信息
 const isLogin = ref(false);
+const isFirstLoad = ref(true);
+const needRefresh = ref(false);
 
 const currentIndustryName = computed(() => {
   console.log(industryIndex.value);
@@ -216,13 +218,67 @@ const getUserData = () => {
 
 onLoad(() => {
   getIndustries();
+  uni.$on('supplyChanged', (payload) => {
+    if (payload.action === 'update') {
+      const index = list.value.findIndex(item => item.id == payload.id);
+      if (index !== -1) {
+        list.value[index] = { ...list.value[index], ...payload.data };
+      }
+    } else if (payload.action === 'delete') {
+      const index = list.value.findIndex(item => item.id == payload.id);
+      if (index !== -1) {
+        list.value.splice(index, 1);
+      }
+    } else if (payload.action === 'add') {
+      needRefresh.value = true;
+    }
+  });
 });
+
+const silentRefresh = () => {
+  let currentLoadedCount = list.value.length;
+  if (currentLoadedCount === 0) {
+    getList(true);
+    return;
+  }
+  let params = {
+    page: 1,
+    page_size: currentLoadedCount,
+    keyword: keyword.value,
+  };
+
+  if (currentTab.value !== '') {
+    params.type = currentTab.value;
+  }
+
+  const selectedIndustry = industries.value[industryIndex.value];
+  if (selectedIndustry && selectedIndustry.company_name !== '' && selectedIndustry.company_name !== '全部行业') {
+    params.industry = selectedIndustry.company_name
+  }
+
+  supply.list(params).then(res => {
+    if (res.code == 200 && res.data) {
+      list.value = res.data.list || [];
+    }
+  });
+};
 
 onShow(() => {
   isLogin.value = uni.getStorageSync("isLogin") || false;
   getUserData();
   getMyCount();
-  getList(true);
+  
+  if (isFirstLoad.value) {
+    getList(true);
+    isFirstLoad.value = false;
+  } else if (needRefresh.value) {
+    silentRefresh();
+    needRefresh.value = false;
+  }
+});
+
+onUnload(() => {
+  uni.$off('supplyChanged');
 });
 
 </script>

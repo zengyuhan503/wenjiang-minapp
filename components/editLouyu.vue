@@ -90,7 +90,7 @@
                   :key="company_1.id"
                 >
                   <div class="title">{{ company_1.name }}</div>
-                  <div class="count">
+                  <div class="count" v-show="company.is_show==1">
                     {{ getAreaValue(company.id, company_1.area_list) }}m²
                   </div>
                 </div>

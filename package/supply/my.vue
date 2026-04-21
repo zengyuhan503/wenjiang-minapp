@@ -136,6 +136,7 @@ const confirmDelete = () => {
     supply.delete(itemToDelete.value.id).then(res => {
       if (res.code == 200 || res.code === 0 || !res.code) {
         uni.showToast({ title: '删除成功', icon: 'none' ,duration: 3500});
+        uni.$emit('supplyChanged', { action: 'delete', id: itemToDelete.value.id });
         getList(true); // 成功后重新加载第一页数据
       } else {
         uni.showToast({ title: res.message || res.msg || '删除失败' , icon: 'none' ,duration: 3500});

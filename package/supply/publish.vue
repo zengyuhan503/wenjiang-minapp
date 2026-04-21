@@ -212,6 +212,7 @@ const onSubmit = () => {
       uni.hideLoading();
       if (res.code == 200 || res.code === 0 || !res.code) {
         showSuccessDialog.value = true;
+        uni.$emit('supplyChanged', { action: 'update', id: currentId, data: formData.value });
       } else {
         uni.showToast({ title: res.message || '更新失败', icon: 'none' });
       }
@@ -226,6 +227,7 @@ const onSubmit = () => {
       uni.hideLoading();
       if (res.code == 200 || res.code === 0 || !res.code) {
         showSuccessDialog.value = true;
+        uni.$emit('supplyChanged', { action: 'add' });
       } else {
         uni.showToast({ title: res.message || '发布失败', icon: 'none' });
       }
