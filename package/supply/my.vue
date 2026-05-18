@@ -15,7 +15,7 @@
           <view class="item-middle">
             <view class="info-group">
               <text class="type-tag" :class="item.type == 1 ? 'supply' : 'demand'">
-                {{ item.type == 1 ? '供应' : '求购' }}
+                {{ item.type == 1 ? '供应' : '需求' }}
               </text>
               <text class="date">{{ moment(item.created_at).format('YYYY-MM-DD') }}</text>
             </view>

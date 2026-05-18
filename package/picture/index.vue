@@ -168,7 +168,12 @@ onLoad((options) => {
   houseId.value = options.id;
   roomId.value = options.room_id;
   getPictures();
-  isLogin.value = uni.getStorageSync("isLogin") || false;
+  let userInfo = uni.getStorageSync("userInfo") ;
+  if (userInfo) {
+    let user = JSON.parse(userInfo);
+    let userType = user.user_type==2?true:false; // 判断是否属于企业账号还是走访账号  ， 可编辑内容需要走访账号
+    isLogin.value = uni.getStorageSync("isLogin") && userType || false;
+  }
 });
 </script>
 

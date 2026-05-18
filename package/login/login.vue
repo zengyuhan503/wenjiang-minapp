@@ -12,7 +12,7 @@
           src="https://louyu.zdocd.com/wxapp/static/image/login-icon.webp"
           mode="widthFix"
         ></image>
-        <view class="login-head-text"> 温江区楼宇帮 </view>
+        <view class="login-head-text"> 温小楼 </view>
       </view>
     </view>
     <view class="login-content">

@@ -33,7 +33,7 @@
       <view class="tabs">
         <view class="tab-item" :class="{ active: currentTab === '' }" @click="changeTab('')">全部</view>
         <view class="tab-item" :class="{ active: currentTab === 1 }" @click="changeTab(1)">供应</view>
-        <view class="tab-item" :class="{ active: currentTab === 2 }" @click="changeTab(2)">求购</view>
+        <view class="tab-item" :class="{ active: currentTab === 2 }" @click="changeTab(2)">需求</view>
       </view>
     </view>
 
@@ -44,7 +44,7 @@
 
           <view class="item-footer">
             <view class="tag-row">
-              <view class="type-tag" :class="item.type == 1 ? 'supply' : 'demand'">{{ item.type == 1 ? '供应' : '求购' }}
+              <view class="type-tag" :class="item.type == 1 ? 'supply' : 'demand'">{{ item.type == 1 ? '供应' : '需求' }}
               </view>
               <view class="date">{{ moment(item.created_at).format('YYYY-MM-DD') }}</view>
               <view class="company">{{ item.company_name }}</view>
@@ -75,7 +75,7 @@ const industries = ref([{ id: '', company_name: '全部行业' }]);
 const industryIndex = ref(0);
 const showDropdown = ref(false);
 const keyword = ref('');
-const currentTab = ref(''); // '' = 全部, 1 = 供应, 2 = 求购
+const currentTab = ref(''); // '' = 全部, 1 = 供应, 2 = 需求
 const list = ref([]);
 const page = ref(1);
 const pageSize = ref(10);

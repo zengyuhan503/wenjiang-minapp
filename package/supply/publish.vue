@@ -31,7 +31,7 @@
             :class="{ active: formData.type === 2 }" 
             @click="selectType(2)"
           >
-            <text>求购</text>
+            <text>需求</text>
             <image 
               v-if="formData.type === 2" 
               class="radio-icon" 
@@ -63,7 +63,7 @@
             class="content-textarea" >
             <textarea 
             v-model="formData.content" 
-            placeholder="您可以详细表述您想求购的产品或介绍您的企业，以达成互利；提交后需平台审核后再展示，其他企业可以在您的供需下提交联系方式，建立线下联系，联系方式不对外展示。" 
+            placeholder="您可以详细表述您需求的产品或介绍您的企业，以达成互利；提交后需平台审核后再展示，其他企业可以在您的供需下提交联系方式，建立线下联系，联系方式不对外展示。" 
             placeholder-class="placeholder-style"
             :maxlength="500"
             auto-height
@@ -113,7 +113,7 @@ import SuccessModal from "@/components/successModal.vue";
 import { supply, upload } from "@/utlis/https.js";
 
 const formData = ref({
-  type: 1, // 1 供应，2 求购
+  type: 1, // 1 供应，2 需求
   title: "",
   content: "",
   images: []
