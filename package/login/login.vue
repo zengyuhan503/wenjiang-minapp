@@ -52,6 +52,9 @@
       <view class="login-input" style="margin-top: 35px">
         <button type="primary" @click="onSubmit">登录</button>
       </view>
+      <view class="login-input" style="margin-top: 15px">
+        <button class="register-btn" @click="goToRegister">企业注册</button>
+      </view>
     </view>
     <SubmitResultDialog ref="submitResultDialogRef" />
   </view>
@@ -70,6 +73,11 @@ const submitResultDialogRef = ref(null);
 const goToOut = () => {
   uni.reLaunch({
     url: "/pages/home/index",
+  });
+};
+const goToRegister = () => {
+  uni.navigateTo({
+    url: "/package/login/register",
   });
 };
 const onSubmit = () => {
@@ -160,6 +168,14 @@ const onSubmit = () => {
     border: #3071f2;
     &:focus {
       color: #3071f2;
+    }
+  }
+  .register-btn {
+    background: #ffffff;
+    color: #3071f2;
+    border: 1px solid #3071f2;
+    &::after {
+      border: none;
     }
   }
 }

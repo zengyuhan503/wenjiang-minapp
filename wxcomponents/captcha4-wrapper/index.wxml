@@ -1,0 +1,10 @@
+<captcha4-native
+  id="captchaInner"
+  captchaId="{{captchaId}}"
+  useNativeButton="{{useNativeButton}}"
+  bind:success="onSuccess"
+  bind:ready="onReady"
+  bind:close="onClose"
+  bind:error="onError"
+  bind:fail="onFail"
+/>

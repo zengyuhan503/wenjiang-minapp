@@ -37,6 +37,16 @@
 				}
 			},
 			{
+				"path": "login/register",
+				"style": {
+					"navigationBarTitleText": "企业注册",
+					"navigationStyle": "custom",
+					"usingComponents": {
+						"captcha4": "/wxcomponents/captcha4-wrapper/index"
+					}
+				}
+			},
+			{
 				"path": "louyu/edit",
 				"style": {
 					"navigationBarTitleText": "编辑企业"

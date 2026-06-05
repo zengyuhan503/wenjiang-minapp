@@ -10,7 +10,7 @@
 						<view class="back-icon-boxs" @click.stop="toSetting">
 							<image src="https://louyu.zdocd.com/wxapp/static/image/setting.png" mode="widthFix" />
 						</view>
-						<view class="back-icon-boxs" v-if="isLogin && userInfo?.type === 3" @click.stop="toCompany">
+						<view class="back-icon-boxs" v-if="isLogin && userInfo?.type === 3 && userInfo?.company?.is_apply === 0" @click.stop="toCompany">
 							<image src="https://louyu.zdocd.com/wxapp/static/image/brand.png" mode="widthFix" />
 						</view>
 					</view>

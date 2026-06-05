@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "captcha4-native": "/wxcomponents/captcha4/captcha4"
+  }
+}

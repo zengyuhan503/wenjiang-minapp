@@ -122,11 +122,7 @@ const formData = ref({
 let currentId = null;
 const showSuccessDialog = ref(false);
 
-onLoad((options) => {
-  if (options.id) {
-    currentId = options.id;
-    getDetail(options.id);
-  }
+onLoad((options) => {   
 });
 
 const getDetail = (id) => {

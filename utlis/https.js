@@ -234,6 +234,17 @@ export const ai = {
     }
 }
 
+export const companyApply = {
+    // 发送验证码
+    sendCode: (params) => {
+        return https.post('/company-apply/send-code', params)
+    },
+    // 提交企业注册
+    submit: (params) => {
+        return https.post('/company-apply/submit', params)
+    }
+}
+
 export const upload = {
     // 上传图片
     image: (file) => {
